@@ -24,39 +24,14 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account',
-                                          index=True, compute='_compute_analytic', inverse='_inverse_analytic')
+                                          index=True)
 
     analytic_tag_ids = fields.Many2many(
-        'account.analytic.tag', string='Analytic Tags', compute='_compute_analytic_tag', inverse='_inverse_analytic_tag')
+        'account.analytic.tag', string='Analytic Tags')
 
-    # Analytic Account
-    @api.depends('purchase_line_id')
-    def _compute_analytic(self):
+    @api.onchange('analytic_account_id', 'analytic_tag_ids')
+    def _onchange_analytic_account(self):
         for rec in self:
             if rec.purchase_line_id:
-                for po in rec.purchase_line_id:
-                    rec.analytic_account_id = po.account_analytic_id.id if po.account_analytic_id else False
-            else:
-                rec.analytic_account_id = None
-
-    def _inverse_analytic(self):
-        for po in self.purchase_line_id:
-            if self.purchase_line_id:
-                for rec in self:
-                    po.account_analytic_id = rec.analytic_account_id.id
-
-    # Analytic Tag
-    @api.depends('purchase_line_id')
-    def _compute_analytic_tag(self):
-        for rec in self:
-            if rec.purchase_line_id:
-                for po in rec.purchase_line_id:
-                    rec.analytic_tag_ids = po.analytic_tag_ids.ids if po.analytic_tag_ids else False
-            else:
-                rec.analytic_tag_ids = None
-
-    def _inverse_analytic_tag(self):
-        for po in self.purchase_line_id:
-            if self.purchase_line_id:
-                for rec in self:
-                    po.analytic_tag_ids = rec.analytic_tag_ids.ids
+                rec.purchase_line_id.account_analytic_id = rec.analytic_account_id.id
+                rec.purchase_line_id.analytic_tag_ids = rec.analytic_tag_ids.ids
