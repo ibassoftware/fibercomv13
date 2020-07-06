@@ -36,8 +36,7 @@ class AccountMoveLine(models.Model):
             if rec.purchase_line_id:
                 for po in rec.purchase_line_id:
                     rec.analytic_account_id = po.account_analytic_id.id if po.account_analytic_id else False
-            else:
-                rec.analytic_account_id = None
+           
 
     def _inverse_analytic(self):
         for po in self.purchase_line_id:
@@ -52,8 +51,6 @@ class AccountMoveLine(models.Model):
             if rec.purchase_line_id:
                 for po in rec.purchase_line_id:
                     rec.analytic_tag_ids = po.analytic_tag_ids.ids if po.analytic_tag_ids else False
-            else:
-                rec.analytic_tag_ids = None
 
     def _inverse_analytic_tag(self):
         for po in self.purchase_line_id:
