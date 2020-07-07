@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright YEAR(2019), AUTHOR(IBAS)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
+# Added comment for commit
 from odoo import fields, models, api
 
 import logging
