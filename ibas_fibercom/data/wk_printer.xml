@@ -2,7 +2,6 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- Sequences for sale.order -->
         <record id="wk_printer_zebra" model="wk_printer.printer">
             <field name="name">Zebraprinter</field>
             <field name="printer_type">zpl</field>
