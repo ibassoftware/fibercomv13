@@ -23,11 +23,16 @@
             <field name="model_id" ref="stock.model_stock_production_lot"/>
             <field name="template_text">
                 ^XA
-                ^FO100,50
-                ^A0N,44,33^FD Item Description: ^FS
                 ^FO100,100
-                ^A0N,44,33^FD {self.product_id.name} ^FS
-                ^FO100,150^BY3
+                ^A0N,33,33^FD Item Description: ^FS
+                ^FO100,150
+                ^A0N,33,33^FD {self.product_id.name} ^FS
+                ^FO100,200
+                ^BY3
+                ^BCN,100,Y,N,N
+                ^FD {self.product_id.barcode} ^FS
+                ^FO100,350
+                ^BY3
                 ^BCN,100,Y,N,N
                 ^FD {self.name} ^FS
                 ^XZ
