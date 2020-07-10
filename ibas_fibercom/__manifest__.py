@@ -27,6 +27,8 @@
         # 'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
         'data/report_paperformat_data.xml',
+        'data/wk_printer.xml',
+        'data/report_data.xml',
         'views/views.xml',
         'views/templates.xml',
         'views/stock.xml',
@@ -38,6 +40,7 @@
         'report/delivery_slip.xml',
         'report/purchase_order.xml',
         'report/report_account_stp.xml',
+        'report/report_transfer_barcode_zpl.xml',
         'report/report_menu.xml',
     ],
     # only loaded in demonstration mode
