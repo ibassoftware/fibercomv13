@@ -1,0 +1,91 @@
+<odoo>
+    <template id="label_transfer_template_view_zpl_extend" name="Transfer Barcode ZPL" inherit_id="stock.label_transfer_template_view_zpl">
+        <xpath expr="//t[@t-foreach='docs']" position="replace">
+            <t t-foreach="docs" t-as="picking">
+                        <t t-foreach="picking.move_lines" t-as="move">
+                            <t t-foreach="move.move_line_ids" t-as="move_line">
+                                      <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit' and move_line.product_id.tracking != 'none'">
+                                          <t t-set="qty" t-value="int(move_line.qty_done)"/>
+                                      </t>
+                                      <t t-else="">
+                                          <t t-set="qty" t-value="1"/>
+                                      </t>
+                                      <t t-foreach="range(qty)" t-as="item">
+            <t t-call="web.basic_layout">
+                <div class="page custom_font">
+                                        <div style="font-size:12px">
+                                            <table style="border: 0;" t-if="picking.move_lines">
+                                                <tr>
+                                                    <th>
+                                                        <strong><span>Item Description:</span></strong><br/>
+                                                        <strong><span t-esc="move.product_id.name"/></strong>
+                                                        <br/>
+                                                        <t t-if="move.product_id.tracking != 'none'">
+                                                            <strong><span t-esc="item"/> <span t-esc="move.product_uom.name"/></strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong><span t-esc="move.quantity_done"/> <span t-esc="move.product_uom.name"/></strong>
+                                                        </t>
+                                                    </th>
+                                                </tr>
+                                                <t t-if="move_line.product_id.barcode">
+                                                    <tr>
+                                                        <td style="text-align: center">
+                                                            <t t-if="move_line.product_id.barcode">
+                                                                  <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move_line.product_id.barcode, 600, 150)" style="display: block;
+  margin-left: auto; width:100%;height:4rem" alt="Barcode"/>
+                                                                  <strong><span t-esc="move_line.product_id.barcode"/></strong>
+                                                                  <br/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <strong><span class="text-muted">No barcode available</span></strong>
+                                                                <br/>
+                                                            </t>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <t t-if="move_line.product_id.tracking != 'none'">
+                                                    <tr>
+                                                        <td style="text-align: center">
+                                                            <t t-if="move_line.lot_name or move_line.lot_id">
+                                                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move_line.lot_name, 600, 150)" style="display: block;
+  margin-left: auto; width:100%;height:4rem" alt="Barcode"/>
+                                                                <strong><span t-esc="move_line.lot_name or move_line.lot_id.name"/></strong>
+                                                                <br/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <strong><span class="text-muted">No barcode available</span></strong>
+                                                                <br/>
+                                                            </t>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <t t-if="move_line.product_id.tracking == 'none'">
+                                                    <tr>
+                                                        <td style="text-align: center">
+                                                            <t t-if="move_line.product_id.barcode">
+                                                                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move_line.product_id.barcode, 600, 150)" style="display: block;
+  margin-left: auto; width:100%;height:4rem" alt="Barcode"/>
+                                                                    <strong><span t-esc="move_line.product_id.barcode"/></strong>
+                                                                    <br/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <strong><span class="text-muted">No barcode available</span></strong>
+                                                                <br/>
+                                                            </t>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </table>
+                                        </div>
+                                        
+                            
+                </div>
+                </t>
+                </t>
+                </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>

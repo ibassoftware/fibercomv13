@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ZPL REPORT TEMPLATE -->
+        <record id="ibas_fibercom.report_template_product_zpl" model="report.template">
+            <field name="name">Report Template Product ZPL</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="template_text">
+                ^XA
+                ^FO100,50
+                ^A0N,44,33^FD Item Description: ^FS
+                ^FO100,100
+                ^A0N,44,33^FD {self.name} ^FS
+                ^FO100,150^BY3
+                ^BCN,100,Y,N,N
+                ^FD {self.barcode} ^FS
+                ^XZ
+            </field>
+        </record>
+        
+        <record id="ibas_fibercom.report_template_lot_serial_zpl" model="report.template">
+            <field name="name">Report Template Lot/Serial ZPL</field>
+            <field name="model_id" ref="stock.model_stock_production_lot"/>
+            <field name="template_text">
+                ^XA
+                ^FO100,100
+                ^A0N,33,33^FD Item Description: ^FS
+                ^FO100,150
+                ^A0N,33,33^FD {self.product_id.name} ^FS
+                ^FO100,200
+                ^BY3
+                ^BCN,100,Y,N,N
+                ^FD {self.product_id.barcode} ^FS
+                ^FO100,350
+                ^BY3
+                ^BCN,100,Y,N,N
+                ^FD {self.name} ^FS
+                ^XZ
+            </field>
+        </record>
+        
+        <!-- REPORT DATA -->
+        <record id="stock.action_label_transfer_template_zpl" model="ir.actions.report">
+            <field name="report_type">qweb-pdf</field>
+            <field name="paperformat_id" ref="ibas_fibercom.paperformat_4_by_3"/>
+            <field name="report_user_action">send_to_printer</field>
+            <field name="printer_id" ref="ibas_fibercom.wk_printer_zebra"/>
+        </record>
+        
+        <record id="stock.label_barcode_product_template" model="ir.actions.report">
+            <field name="paperformat_id" ref="ibas_fibercom.paperformat_4_by_3"/>
+            <field name="report_user_action">send_to_printer</field>
+            <field name="printer_id" ref="ibas_fibercom.wk_printer_zebra"/>
+            <field name="use_template" eval="True"/>
+            <field name="report_template_id" ref="ibas_fibercom.report_template_product_zpl"/>
+        </record>
+        
+        <record id="stock.label_lot_template" model="ir.actions.report">
+            <field name="paperformat_id" ref="ibas_fibercom.paperformat_4_by_3"/>
+            <field name="report_user_action">send_to_printer</field>
+            <field name="printer_id" ref="ibas_fibercom.wk_printer_zebra"/>
+            <field name="use_template" eval="True"/>
+            <field name="report_template_id" ref="ibas_fibercom.report_template_lot_serial_zpl"/>
+        </record>
+        
+        
+    </data>
+</odoo>
