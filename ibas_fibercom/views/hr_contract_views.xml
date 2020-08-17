@@ -1,0 +1,101 @@
+<odoo>
+<data>
+    <record id="ibas_hr_contract_view_form" model="ir.ui.view">
+        <field name="name">ibas.hr.contract.view.form</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//group[1]" position="replace">
+                <group>
+                    <group>
+                        <field name="active" invisible="1"/>
+                        <field name="employee_id"/>
+                        <field name="department_id"/>
+                        <field name="job_id"/>
+                    </group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="type_id"/>
+                        <field name="struct_id"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="//notebook" position="replace">
+                <notebook>
+                    <page string="Salary Information" name="information">
+                        <group name="main_info">
+                            <group name="salary_and_advantages" string="Monthly Advantages in Cash">
+                                <label for="wage"/>
+                                <div class="o_row" name="wage">
+                                    <field name="wage" nolabel="1"/>
+                                    <span>/ month</span>
+                                </div>
+                                <field name="amount_in_words"/>
+                                <field name="work_days"/>
+                                <field name="daily_wage"/>
+                                <field name="daily_wage_in_words"/>
+                                <field name="allowance"/>
+                                <field name="probationary_period"/>
+                                <field name="advantages" nolabel="1" placeholder="Advantages..." colspan="2" invisible="1"/>
+                            </group>
+                            <group name="statutory_contribution" string="Statutory Contribution">
+                                <field name="sss_ec"/>
+                                <field name="sss_er"/>
+                                <field name="sss_ee"/>
+                                <field name="philhealth_personal"/>
+                                <field name="philhealth_company"/>
+                                <field name="hdmf_company"/>
+                                <field name="hdmf_personal"/>
+                            </group>
+                        </group>
+                    </page>
+
+                    <page string="Contract Details" name="other">
+                        <group>
+                            <group name="duration_group" string="Contract Terms">
+                                <field name="date_start"/>
+                                <label for="date_end"/>
+                                <div class="o_row">
+                                    <field name="date_end" nolabel="1"/>
+                                    <span class="text-muted">(If fixed-term contract)</span>
+                                </div>
+                                <field name="trial_date_end"/>
+                                <field name="calendar_mismatch" invisible="1"/>
+                                <label for="resource_calendar_id"/>
+                                <div>
+                                    <field name="resource_calendar_id" required="1" nolabel="1"/>
+                                    <span attrs="{'invisible': ['|', ('calendar_mismatch', '=', False), ('state', '!=', 'open')]}" class="fa fa-exclamation-triangle text-danger o_calendar_warning pl-3">
+                                    </span>
+                                    <span class="o_calendar_warning_tooltip text-danger">
+                                        Calendar Mismatch : The employee's calendar does not match this contract's calendar. This could lead to unexpected behaviors.
+                                    </span>
+                                </div>
+                                <field name="schedule_pay"/>
+                            </group>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </group>
+                    </page>
+                   
+                </notebook>
+            </xpath>
+
+           
+        </field>
+    </record>
+
+     <!--<record id="ibas_hr_payroll_structure_view_form" model="ir.ui.view">
+        <field name="name">ibas.hr.payroll.structure.view.form</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_employee_grade_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_id']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+        </field>
+    </record>-->
+</data>
+</odoo>
