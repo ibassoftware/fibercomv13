@@ -72,7 +72,7 @@
                                         Calendar Mismatch : The employee's calendar does not match this contract's calendar. This could lead to unexpected behaviors.
                                     </span>
                                 </div>
-                                <field name="schedule_pay"/>
+                                <field name="scheduled_pay"/>
                             </group>
                         </group>
                         <group string="Notes">
