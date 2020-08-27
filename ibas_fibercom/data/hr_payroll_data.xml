@@ -40,15 +40,13 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = 0.0
-            if contract.scheduled_pay == 'daily':
-                result = contract.wage /4
-            if contract.scheduled_pay == 'weekly':
-                result = contract.wage / 4
-            if contract.scheduled_pay == 'bi-monthly':
-                result = contract.wage / 2
-            </field>
+            <field name="amount_python_compute"> result = 0.0
+if contract.scheduled_pay == 'daily':
+    result = contract.wage /4
+if contract.scheduled_pay == 'weekly':
+    result = contract.wage / 4
+if contract.scheduled_pay == 'bi-monthly':
+    result = contract.wage / 2</field>
             <field name="sequence" eval="1"/>
         </record>
 
@@ -61,15 +59,13 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = 0.0
-            if contract.scheduled_pay == 'daily':
-                result = contract.allowance /4
-            if contract.scheduled_pay == 'weekly':
-                result = contract.allowance / 4
-            if contract.scheduled_pay == 'bi-monthly':
-                result = contract.allowance / 2
-            </field>
+            <field name="amount_python_compute">result = 0.0
+if contract.scheduled_pay == 'daily':
+    result = contract.allowance /4
+if contract.scheduled_pay == 'weekly':
+    result = contract.allowance / 4
+if contract.scheduled_pay == 'bi-monthly':
+    result = contract.allowance / 2</field>
             <field name="sequence" eval="100"/>
         </record>
 
@@ -97,9 +93,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = categories.BASIC + categories.PREMIUM + categories.ALW
-            </field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.PREMIUM</field>
             <field name="sequence" eval="100"/>
         </record>
         <!--Salary Rule 13thMonth Pay / Backpay-->
@@ -112,9 +106,7 @@
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.generate_backpay</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = employee._current_year_avg_net_pay(current_payslip=payslip)
-            </field>
+            <field name="amount_python_compute">result = employee._current_year_avg_net_pay(current_payslip=payslip)</field>
             <field name="sequence" eval="110"/>
         </record>
 
@@ -127,8 +119,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = sum(employee.trip_ids.filtered(lambda r: r.date &gt;= payslip.date_from and r.date &lt;= payslip.date_to).mapped('amount'))</field>
+            <field name="amount_python_compute">result = sum(employee.trip_ids.filtered(lambda r: r.date &gt;= payslip.date_from and r.date &lt;= payslip.date_to).mapped('amount'))</field>
             <field name="sequence" eval="120"/>
         </record>
 
@@ -142,9 +133,7 @@
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.deduct_philhealth</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = contract.philhealth_personal
-            </field>
+            <field name="amount_python_compute">result = contract.philhealth_personal</field>
             <field name="sequence" eval="300"/>
         </record>
 
@@ -186,55 +175,55 @@
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = 0.0
-            gross = categories.GROSS
-            # Daily
-            if contract.schedule_pay == 'daily':
-                if 685 &lt;= gross &lt;= 1095:
-                    result = 0.2 * (gross - 685)
-                if 1096 &lt;= gross &lt;= 2191:
-                    result = 82.19 + (0.25 * (gross - 1096))
-                if 2192 &lt;= gross &lt;= 5478:
-                    result = 356.16 + (0.30 * (gross - 2192))
-                if 5479 &lt;= gross &lt;= 21917:
-                    result = 1342.47 + (0.32 * (gross - 5479))
-                if 21918 &lt;= gross:
-                    result = 6602.74 + (0.35 * (gross - 21918))
-            # Weekly
-            if contract.schedule_pay == 'weekly':
-                if 4808 &lt;= gross &lt;= 7691:
-                    result = 0.2 * (gross - 4808)
-                if 7692 &lt;= gross &lt;= 15384:
-                    result = 576.92 + (0.25 * (gross - 7692))
-                if 15385 &lt;= gross &lt;= 38461:
-                    result = 2500 + (0.30 * (gross - 15385))
-                if 38462 &lt;= gross &lt;= 153845:
-                    result = 9423.08 + (0.32 * (gross - 38462))
-                if 153846 &lt;= gross:
-                    result = 46346.15 + (0.35 * (gross - 153846))
-            # Bi-Monthly
-            if contract.schedule_pay == 'bi-monthly':
-                if 10417 &lt;= gross &lt;= 16666:
-                    result = 0.2 * (gross - 10417)
-                if 16667 &lt;= gross &lt;= 33332:
-                    result = 1250 + (0.25 * (gross - 16667))
-                if 33333 &lt;= gross &lt;= 83332:
-                    result = 5416.67 + (0.30 * (gross - 33333))
-                if 83333 &lt;= gross &lt;= 333332:
-                    result = 20416.67 + (0.32 * (gross - 83333))
-                if 333333 &lt;= gross:
-                    result = 100416.67 + (0.35 * (gross - 333333))
-            # Monthly
-            if contract.schedule_pay == 'monthly':
-                if 20833 &lt;= gross &lt;= 33332:
-                    result = 0.2 * (gross - 20833)
-                if 33333 &lt;= gross &lt;= 66666:
-                    result = 2500 + (0.25 * (gross - 33333))
-                if 66667 &lt;= gross &lt;= 166666:
-                    result = 10833.33 + (0.30 * (gross - 66667))
-                if 166667 &lt;= gross &lt;= 666666:
-                    result = 40833.33 + (0.32 * (gross - 166667))
-                if 666667 &lt;= gross:
-            result = 200833.33 + (0.35 * (gross - 666667))</field>
+gross = categories.GROSS
+# Daily
+if contract.schedule_pay == 'daily':
+    if 685 &lt;= gross &lt;= 1095:
+        result = 0.2 * (gross - 685)
+    if 1096 &lt;= gross &lt;= 2191:
+        result = 82.19 + (0.25 * (gross - 1096))
+    if 2192 &lt;= gross &lt;= 5478:
+        result = 356.16 + (0.30 * (gross - 2192))
+    if 5479 &lt;= gross &lt;= 21917:
+        result = 1342.47 + (0.32 * (gross - 5479))
+    if 21918 &lt;= gross:
+        result = 6602.74 + (0.35 * (gross - 21918))
+# Weekly
+if contract.schedule_pay == 'weekly':
+    if 4808 &lt;= gross &lt;= 7691:
+        result = 0.2 * (gross - 4808)
+    if 7692 &lt;= gross &lt;= 15384:
+        result = 576.92 + (0.25 * (gross - 7692))
+    if 15385 &lt;= gross &lt;= 38461:
+        result = 2500 + (0.30 * (gross - 15385))
+    if 38462 &lt;= gross &lt;= 153845:
+        result = 9423.08 + (0.32 * (gross - 38462))
+    if 153846 &lt;= gross:
+        result = 46346.15 + (0.35 * (gross - 153846))
+# Bi-Monthly
+if contract.schedule_pay == 'bi-monthly':
+    if 10417 &lt;= gross &lt;= 16666:
+        result = 0.2 * (gross - 10417)
+    if 16667 &lt;= gross &lt;= 33332:
+        result = 1250 + (0.25 * (gross - 16667))
+    if 33333 &lt;= gross &lt;= 83332:
+        result = 5416.67 + (0.30 * (gross - 33333))
+    if 83333 &lt;= gross &lt;= 333332:
+        result = 20416.67 + (0.32 * (gross - 83333))
+    if 333333 &lt;= gross:
+        result = 100416.67 + (0.35 * (gross - 333333))
+# Monthly
+if contract.schedule_pay == 'monthly':
+    if 20833 &lt;= gross &lt;= 33332:
+        result = 0.2 * (gross - 20833)
+    if 33333 &lt;= gross &lt;= 66666:
+        result = 2500 + (0.25 * (gross - 33333))
+    if 66667 &lt;= gross &lt;= 166666:
+        result = 10833.33 + (0.30 * (gross - 66667))
+    if 166667 &lt;= gross &lt;= 666666:
+        result = 40833.33 + (0.32 * (gross - 166667))
+    if 666667 &lt;= gross:
+result = 200833.33 + (0.35 * (gross - 666667))</field>
             <field name="sequence" eval="340"/>
         </record>
 
@@ -247,9 +236,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = worked_days.LATE.number_of_hours * (contract.daily_wage / 8)
-            </field>
+            <field name="amount_python_compute">result = worked_days.LATE.number_of_hours * (contract.daily_wage / 8)</field>
             <field name="sequence" eval="350"/>
         </record>
 
@@ -262,9 +249,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = worked_days.ABSENT.number_of_days * contract.daily_wage
-            </field>
+            <field name="amount_python_compute">result = worked_days.ABSENT.number_of_days * contract.daily_wage</field>
             <field name="sequence" eval="360"/>
         </record>
         
@@ -277,9 +262,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = worked_days.UNDERTIME.number_of_hours * (contract.daily_wage / 8)
-            </field>
+            <field name="amount_python_compute">result = worked_days.UNDERTIME.number_of_hours * (contract.daily_wage / 8)</field>
             <field name="sequence" eval="351"/>
         </record>     
 
@@ -292,9 +275,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = categories.BASIC + categories.ALW + categories.DED
-            </field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.DED</field>
             <field name="sequence" eval="200"/>
         </record>
 
@@ -307,9 +288,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = categories.NET + categories.ADJUSTMENTS - categories.ADVANCES - categories.LOANS
-            </field>
+            <field name="amount_python_compute">result = categories.NET + categories.ADJUSTMENTS - categories.ADVANCES - categories.LOANS</field>
             <field name="sequence" eval="800"/>
         </record>   
 
@@ -378,14 +357,13 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-                result = 0.0
-                hourly_rate = contract.daily_wage / 8
-                result += hourly_rate * worked_days.RD.number_of_hours * 1.3
-                result += hourly_rate * worked_days.SH.number_of_hours * 1.3
-                result += hourly_rate * worked_days.RH.number_of_hours * 1.2
-                result += hourly_rate * worked_days.RDSH.number_of_hours * 1.5
-                result += hourly_rate * worked_days.RDRH.number_of_hours * 2.6</field>
+            <field name="amount_python_compute">result = 0.0
+hourly_rate = contract.daily_wage / 8
+result += hourly_rate * worked_days.RD.number_of_hours * 1.3
+result += hourly_rate * worked_days.SH.number_of_hours * 1.3
+result += hourly_rate * worked_days.RH.number_of_hours * 1.2
+result += hourly_rate * worked_days.RDSH.number_of_hours * 1.5
+result += hourly_rate * worked_days.RDRH.number_of_hours * 2.6</field>
             <field name="sequence" eval="10"/>
         </record>
 
@@ -398,15 +376,14 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-                result = 0.0
-                hourly_rate = contract.daily_wage / 8
-                result += hourly_rate * worked_days.OT.number_of_hours * 1.25
-                result += hourly_rate * worked_days.RDOT.number_of_hours * 1.69
-                result += hourly_rate * worked_days.SHOT.number_of_hours * 1.69
-                result += hourly_rate * worked_days.RHOT.number_of_hours * 2.6
-                result += hourly_rate * worked_days.RDSHOT.number_of_hours * 1.95
-                result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
+            <field name="amount_python_compute">result = 0.0
+hourly_rate = contract.daily_wage / 8
+result += hourly_rate * worked_days.OT.number_of_hours * 1.25
+result += hourly_rate * worked_days.RDOT.number_of_hours * 1.69
+result += hourly_rate * worked_days.SHOT.number_of_hours * 1.69
+result += hourly_rate * worked_days.RHOT.number_of_hours * 2.6
+result += hourly_rate * worked_days.RDSHOT.number_of_hours * 1.95
+result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
             <field name="sequence" eval="20"/>
         </record>
 
@@ -445,9 +422,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'sss').mapped('amount_deduct'))
-            </field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'sss').mapped('amount_deduct'))</field>
             <field name="sequence" eval="700"/>
         </record>
 
@@ -460,9 +435,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'hdmf').mapped('amount_deduct'))
-            </field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'hdmf').mapped('amount_deduct'))</field>
             <field name="sequence" eval="710"/>
         </record>
 
@@ -475,9 +448,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'other').mapped('amount_deduct'))
-            </field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'other').mapped('amount_deduct'))</field>
             <field name="sequence" eval="720"/>
         </record>
         
