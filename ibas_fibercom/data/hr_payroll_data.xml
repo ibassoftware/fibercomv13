@@ -30,6 +30,16 @@
             <!--<field name="type_id" ref="ibas_fibercom.BASE_STRUCTURE_TYPE"/>-->
         </record>
 
+        <!--Payslip Other Input Types -->
+        <!--Other Input Adjustment -->
+        <record id="hr_payslip_input_type_adjustment" model="hr.payslip.input.type">
+            <field name="name">Adjustment</field>
+            <field name="code">ADJ</field>
+            <field name="struct_ids" eval="[(6, 0, [ ref('ibas_fibercom.BASE_STRUCTURE')])]"/>
+        </record>
+
+      
+
         <!--Salary Rule-->
         <!--Salary Rule Basic Pay -->
         <record id="hr_rule_basic_pay" model="hr.salary.rule">
