@@ -32,46 +32,58 @@
 
         <!--Work Entry Types -->
         <!--Work Entry Regular Overtime -->
+        <!--
         <record id="hr_work_entry_type_regular_overtime" model="hr.work.entry.type">
             <field name="name">Regular Overtime</field>
             <field name="code">OT</field>
             <field name="round_days">NO</field>
         </record>
+        -->
 
         <!--Work Entry Rest Day Overtime -->
+        <!--
         <record id="hr_work_entry_type_restday_overtime" model="hr.work.entry.type">
             <field name="name">Rest Day Overtime</field>
             <field name="code">RDOT</field>
             <field name="round_days">NO</field>
         </record>
+        -->
 
         <!--Work Entry Regular Holiday Overtime -->
+        <!--
         <record id="hr_work_entry_type_regular_holiday_overtime" model="hr.work.entry.type">
             <field name="name">Regular Holiday Overtime</field>
             <field name="code">RHOT</field>
             <field name="round_days">NO</field>
         </record>
+        -->
 
         <!--Work Entry Special Holiday Overtime -->
+        <!--
         <record id="hr_work_entry_type_special_holiday_overtime" model="hr.work.entry.type">
             <field name="name">Special Holiday Overtime</field>
             <field name="code">SHOT</field>
             <field name="round_days">NO</field>
         </record>
+        -->
 
         <!--Work Entry Rest Day & Regular Holiday Overtime -->
+        <!--
         <record id="hr_work_entry_type_rest_regular_holiday_overtime" model="hr.work.entry.type">
             <field name="name">Rest Day &amp; Regular Holiday Overtime</field>
             <field name="code">RDRHOT</field>
             <field name="round_days">NO</field>
         </record>
+        -->
 
-         <!--Work Entry Rest Day & Regular Special Overtime -->
+        <!--Work Entry Rest Day & Regular Special Overtime -->
+        <!--
         <record id="hr_work_entry_type_rest_special_holiday_overtime" model="hr.work.entry.type">
             <field name="name">Rest Day &amp; Special Holiday Overtime</field>
             <field name="code">RDSHOT</field>
             <field name="round_days">NO</field>
         </record>
+        -->
 
         <!--Payslip Other Input Types -->
         <!--Other Input Adjustment -->
