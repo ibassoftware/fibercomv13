@@ -46,7 +46,7 @@
             <field name="report_user_action">send_to_printer</field>
             <field name="printer_id" ref="ibas_fibercom.wk_printer_zebra"/>
         </record>
-        
+        <!--
         <record id="stock.label_barcode_product_template" model="ir.actions.report">
             <field name="paperformat_id" ref="ibas_fibercom.paperformat_4_by_3"/>
             <field name="report_user_action">send_to_printer</field>
@@ -54,6 +54,7 @@
             <field name="use_template" eval="True"/>
             <field name="report_template_id" ref="ibas_fibercom.report_template_product_zpl"/>
         </record>
+        -->
         
         <record id="stock.label_lot_template" model="ir.actions.report">
             <field name="paperformat_id" ref="ibas_fibercom.paperformat_4_by_3"/>
