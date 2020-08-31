@@ -70,8 +70,8 @@ class IbasHRContract(models.Model):
     @api.depends('wage')
     def _compute_philhealth(self):
         for rec in self:
-            rec.philhealth_personal = (rec.wage * 0.3) / 2
-            rec.philhealth_company = (rec.wage * 0.3) / 2
+            rec.philhealth_personal = (rec.wage * 0.03) / 2
+            rec.philhealth_company = (rec.wage * 0.03) / 2
 
     @api.depends('wage', 'work_days')
     def _compute_daily_rate(self):
