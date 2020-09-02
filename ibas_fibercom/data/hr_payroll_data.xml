@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!--Salary Rule Categories-->
+        <record id="PREMIUM" model="hr.salary.rule.category">
+            <field name="name">Premiums</field>
+            <field name="code">PREMIUM</field>
+        </record>
+        <record id="ADJUSTMENTS" model="hr.salary.rule.category">
+            <field name="name">Adjustments</field>
+            <field name="code">ADJUSTMENTS</field>
+        </record>
+        <record id="ADVANCES" model="hr.salary.rule.category">
+            <field name="name">Advances</field>
+            <field name="code">ADVANCES</field>
+        </record>
+        <record id="LOANS" model="hr.salary.rule.category">
+            <field name="name">Loans</field>
+            <field name="code">LOANS</field>
+        </record>
+
+       <!-- <record id="BASE_STRUCTURE_TYPE" model="hr.payroll.structure.type">
+            <field name="name">Base for new structures type</field>
+            <field name="wage_type">monthly</field>
+            <field name="default_work_entry_type_id" ref="hr_work_entry.work_entry_type_attendance"/>
+        </record> -->
+
+        <record id="BASE_STRUCTURE" model="hr.payroll.structure">
+            <field name="name">Base for new structures</field>
+            <!--<field name="type_id" ref="ibas_fibercom.BASE_STRUCTURE_TYPE"/>-->
+        </record>
+
+        <!--Work Entry Types -->
+        <!--Work Entry Regular Overtime -->
+        <!--
+        <record id="hr_work_entry_type_regular_overtime" model="hr.work.entry.type">
+            <field name="name">Regular Overtime</field>
+            <field name="code">OT</field>
+            <field name="round_days">NO</field>
+        </record>
+        -->
+
+        <!--Work Entry Rest Day Overtime -->
+        <!--
+        <record id="hr_work_entry_type_restday_overtime" model="hr.work.entry.type">
+            <field name="name">Rest Day Overtime</field>
+            <field name="code">RDOT</field>
+            <field name="round_days">NO</field>
+        </record>
+        -->
+
+        <!--Work Entry Regular Holiday Overtime -->
+        <!--
+        <record id="hr_work_entry_type_regular_holiday_overtime" model="hr.work.entry.type">
+            <field name="name">Regular Holiday Overtime</field>
+            <field name="code">RHOT</field>
+            <field name="round_days">NO</field>
+        </record>
+        -->
+
+        <!--Work Entry Special Holiday Overtime -->
+        <!--
+        <record id="hr_work_entry_type_special_holiday_overtime" model="hr.work.entry.type">
+            <field name="name">Special Holiday Overtime</field>
+            <field name="code">SHOT</field>
+            <field name="round_days">NO</field>
+        </record>
+        -->
+
+        <!--Work Entry Rest Day & Regular Holiday Overtime -->
+        <!--
+        <record id="hr_work_entry_type_rest_regular_holiday_overtime" model="hr.work.entry.type">
+            <field name="name">Rest Day &amp; Regular Holiday Overtime</field>
+            <field name="code">RDRHOT</field>
+            <field name="round_days">NO</field>
+        </record>
+        -->
+
+        <!--Work Entry Rest Day & Regular Special Overtime -->
+        <!--
+        <record id="hr_work_entry_type_rest_special_holiday_overtime" model="hr.work.entry.type">
+            <field name="name">Rest Day &amp; Special Holiday Overtime</field>
+            <field name="code">RDSHOT</field>
+            <field name="round_days">NO</field>
+        </record>
+        -->
+
+        <!--Payslip Other Input Types -->
+        <!--Other Input Adjustment -->
+        <record id="hr_payslip_input_type_adjustment" model="hr.payslip.input.type">
+            <field name="name">Adjustment</field>
+            <field name="code">ADJ</field>
+            <field name="struct_ids" eval="[(6, 0, [ ref('ibas_fibercom.BASE_STRUCTURE')])]"/>
+        </record>
+
+        <!--Salary Rule-->
+        <!--Salary Rule Basic Pay -->
+        <record id="hr_rule_basic_pay" model="hr.salary.rule">
+            <field name="name">Basic Pay</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="code">BASICPAY</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute"> result = 0.0
+if contract.scheduled_pay == 'daily':
+    result = contract.wage /4
+if contract.scheduled_pay == 'weekly':
+    result = contract.wage / 4
+if contract.scheduled_pay == 'bi-monthly':
+    result = contract.wage / 2</field>
+            <field name="sequence" eval="1"/>
+        </record>
+
+        <!--Salary Rule ALLOWANCE -->
+        <record id="hr_rule_basic_pay_allowance" model="hr.salary.rule">
+            <field name="name">ALLOWANCE</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">ALLOWANCE</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = 0.0
+if contract.scheduled_pay == 'daily':
+    result = contract.allowance /4
+if contract.scheduled_pay == 'weekly':
+    result = contract.allowance / 4
+if contract.scheduled_pay == 'bi-monthly':
+    result = contract.allowance / 2</field>
+            <field name="sequence" eval="100"/>
+        </record>
+
+        <!--Salary Rule ADDITIONAL ALLOWANCE -->
+        <record id="hr_rule_pay_addt_allowance" model="hr.salary.rule">
+            <field name="name">ADDITIONAL ALLOWANCE</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="code">ADDALLOWANCE</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+            result = inputs.INPADDALL.amount
+            </field>
+            <field name="sequence" eval="100"/>
+        </record> 
+
+        <!--Salary Rule Gross Income-->
+        <record id="hr_rule_gross_income" model="hr.salary.rule">
+            <field name="name">Gross Income</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.GROSS"/>
+            <field name="code">GROSS</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.PREMIUM</field>
+            <field name="sequence" eval="100"/>
+        </record>
+        <!--Salary Rule 13thMonth Pay / Backpay-->
+        <record id="hr_rule_backpay" model="hr.salary.rule">
+            <field name="name">13TH MONTH PAY</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.GROSS"/>
+            <field name="code">13THMP</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.generate_backpay</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee._current_year_avg_net_pay(current_payslip=payslip)</field>
+            <field name="sequence" eval="110"/>
+        </record>
+
+        <!--Salary Rule TRIPS-->
+        <record id="hr_rule_trips" model="hr.salary.rule">
+            <field name="name">TRIPS</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.GROSS"/>
+            <field name="code">TRIP</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = sum(employee.trip_ids.filtered(lambda r: r.date &gt;= payslip.date_from and r.date &lt;= payslip.date_to).mapped('amount'))</field>
+            <field name="sequence" eval="120"/>
+        </record>
+
+        <!--Salary Rule Philhealth Personal Share-->
+        <record id="hr_rule_philee" model="hr.salary.rule">
+            <field name="name">Philhealth Employee Share</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">PHILEE</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_philhealth</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.philhealth_personal</field>
+            <field name="sequence" eval="300"/>
+        </record>
+
+        <!--Salary Rule SSS Employee-->
+        <record id="hr_rule_sssee" model="hr.salary.rule">
+            <field name="name">SSS Employee Share</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">SSSEE</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_sss</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.sss_ee</field>
+            <field name="sequence" eval="310"/>
+        </record>
+
+        <!--Salary Rule HDMF Employee Share-->
+        <record id="hr_rule_hdmfee" model="hr.salary.rule">
+            <field name="name">HDMF Employee Share</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">HDMFEE</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_hdmf</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.hdmf_personal</field>
+            <field name="sequence" eval="330"/>
+        </record>
+
+        <!--Salary Rule Withholding Tax-->
+        <record id="hr_rule_withholding_tax" model="hr.salary.rule">
+            <field name="name">Withholding Tax</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">WT</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = 0.0
+gross = categories.GROSS
+# Daily
+if contract.schedule_pay == 'daily':
+    if 685 &lt;= gross &lt;= 1095:
+        result = 0.2 * (gross - 685)
+    if 1096 &lt;= gross &lt;= 2191:
+        result = 82.19 + (0.25 * (gross - 1096))
+    if 2192 &lt;= gross &lt;= 5478:
+        result = 356.16 + (0.30 * (gross - 2192))
+    if 5479 &lt;= gross &lt;= 21917:
+        result = 1342.47 + (0.32 * (gross - 5479))
+    if 21918 &lt;= gross:
+        result = 6602.74 + (0.35 * (gross - 21918))
+# Weekly
+if contract.schedule_pay == 'weekly':
+    if 4808 &lt;= gross &lt;= 7691:
+        result = 0.2 * (gross - 4808)
+    if 7692 &lt;= gross &lt;= 15384:
+        result = 576.92 + (0.25 * (gross - 7692))
+    if 15385 &lt;= gross &lt;= 38461:
+        result = 2500 + (0.30 * (gross - 15385))
+    if 38462 &lt;= gross &lt;= 153845:
+        result = 9423.08 + (0.32 * (gross - 38462))
+    if 153846 &lt;= gross:
+        result = 46346.15 + (0.35 * (gross - 153846))
+# Bi-Monthly
+if contract.schedule_pay == 'bi-monthly':
+    if 10417 &lt;= gross &lt;= 16666:
+        result = 0.2 * (gross - 10417)
+    if 16667 &lt;= gross &lt;= 33332:
+        result = 1250 + (0.25 * (gross - 16667))
+    if 33333 &lt;= gross &lt;= 83332:
+        result = 5416.67 + (0.30 * (gross - 33333))
+    if 83333 &lt;= gross &lt;= 333332:
+        result = 20416.67 + (0.32 * (gross - 83333))
+    if 333333 &lt;= gross:
+        result = 100416.67 + (0.35 * (gross - 333333))
+# Monthly
+if contract.schedule_pay == 'monthly':
+    if 20833 &lt;= gross &lt;= 33332:
+        result = 0.2 * (gross - 20833)
+    if 33333 &lt;= gross &lt;= 66666:
+        result = 2500 + (0.25 * (gross - 33333))
+    if 66667 &lt;= gross &lt;= 166666:
+        result = 10833.33 + (0.30 * (gross - 66667))
+    if 166667 &lt;= gross &lt;= 666666:
+        result = 40833.33 + (0.32 * (gross - 166667))
+    if 666667 &lt;= gross:
+result = 200833.33 + (0.35 * (gross - 666667))</field>
+            <field name="sequence" eval="340"/>
+        </record>
+
+        <!--Salary Rule LATES-->
+        <record id="hr_rule_late" model="hr.salary.rule">
+            <field name="name">LATE</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">LATE</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = worked_days.LATE.number_of_hours * (contract.daily_wage / 8)</field>
+            <field name="sequence" eval="350"/>
+        </record>
+
+        <!--Salary Rule ABSENCES-->
+        <record id="hr_rule_absences" model="hr.salary.rule">
+            <field name="name">Absent</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">ABSENT</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = worked_days.ABSENT.number_of_days * contract.daily_wage</field>
+            <field name="sequence" eval="360"/>
+        </record>
+        
+        <!--Salary Rule UNDERTIME-->
+        <record id="hr_rule_undertime" model="hr.salary.rule">
+            <field name="name">Undertime</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">UNDERTIME</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = worked_days.UNDERTIME.number_of_hours * (contract.daily_wage / 8)</field>
+            <field name="sequence" eval="351"/>
+        </record>     
+
+        <!--Salary Rule NET SALARY-->
+        <record id="hr_rule_net_salary" model="hr.salary.rule">
+            <field name="name">Net Salary</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="code">NET</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.DED</field>
+            <field name="sequence" eval="200"/>
+        </record>
+
+        <!--Salary Rule NET PAY-->
+        <record id="hr_rule_netpay" model="hr.salary.rule">
+            <field name="name">Net Pay</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="code">NETPAY</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = categories.NET + categories.ADJUSTMENTS - categories.ADVANCES - categories.LOANS</field>
+            <field name="sequence" eval="800"/>
+        </record>   
+
+        <!--Salary Rule SSS Employer Share-->
+        <record id="hr_rule_ssser" model="hr.salary.rule">
+            <field name="name">SSS Employer Share</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.COMP"/>
+            <field name="code">SSSER</field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_sss</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.sss_er</field>
+            <field name="sequence" eval="200"/>
+        </record>
+
+        <!--Salary Rule SSS EC-->
+        <record id="hr_rule_sssec" model="hr.salary.rule">
+            <field name="name">SSS EC</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.COMP"/>
+            <field name="code">SSSEC</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_sss</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.sss_ec</field>
+            <field name="sequence" eval="210"/>
+        </record>
+
+        <!--Salary Rule HDMF Employer Share-->
+        <record id="hr_rule_hdmfer" model="hr.salary.rule">
+            <field name="name">HDMF Employer Share</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.COMP"/>
+            <field name="code">HDMFER</field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_hdmf</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.hdmf_company</field>
+            <field name="sequence" eval="220"/>
+        </record>
+
+        <!--Salary Rule Philhealth Employer Share-->
+        <record id="hr_rule_philer" model="hr.salary.rule">
+            <field name="name">Philhealth Employer Share</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="code">PHILER</field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.deduct_philhealth</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.philhealth_company</field>
+            <field name="sequence" eval="320"/>
+        </record>
+
+        <!--Salary Rule Holidays-->
+        <record id="hr_rule_holidays" model="hr.salary.rule">
+            <field name="name">Holidays</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.PREMIUM"/>
+            <field name="code">HOLIDAY</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = 0.0
+hourly_rate = contract.daily_wage / 8
+result += hourly_rate * worked_days.RD.number_of_hours * 1.3
+result += hourly_rate * worked_days.SH.number_of_hours * 1.3
+result += hourly_rate * worked_days.RH.number_of_hours * 1.2
+result += hourly_rate * worked_days.RDSH.number_of_hours * 1.5
+result += hourly_rate * worked_days.RDRH.number_of_hours * 2.6</field>
+            <field name="sequence" eval="10"/>
+        </record>
+
+        <!--Salary Rule Overtime-->
+        <record id="hr_rule_overtimes" model="hr.salary.rule">
+            <field name="name">Overtime</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.PREMIUM"/>
+            <field name="code">OVERTIME</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = 0.0
+hourly_rate = contract.daily_wage / 8
+result += hourly_rate * worked_days.OT.number_of_hours * 1.25
+result += hourly_rate * worked_days.RDOT.number_of_hours * 1.69
+result += hourly_rate * worked_days.SHOT.number_of_hours * 1.69
+result += hourly_rate * worked_days.RHOT.number_of_hours * 2.6
+result += hourly_rate * worked_days.RDSHOT.number_of_hours * 1.95
+result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
+            <field name="sequence" eval="20"/>
+        </record>
+
+         <!--Salary Rule Adjustments-->
+        <record id="hr_rule_adjustments" model="hr.salary.rule">
+            <field name="name">Adjustments</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.ADJUSTMENTS"/>
+            <field name="code">ADJ</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.INPADJ.amount</field>
+            <field name="sequence" eval="500"/>
+        </record>
+
+        <!--Salary Rule Advances-->
+        <record id="hr_rule_advances" model="hr.salary.rule">
+            <field name="name">Advances</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.ADVANCES"/>
+            <field name="code">ADV</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.INPADV.amount</field>
+            <field name="sequence" eval="600"/>
+        </record>
+
+        <!--Salary Rule SSS Loan-->
+        <record id="hr_rule_sssloan" model="hr.salary.rule">
+            <field name="name">SSS Loan</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.LOANS"/>
+            <field name="code">SSSLOAN</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'sss').mapped('amount_deduct'))</field>
+            <field name="sequence" eval="700"/>
+        </record>
+
+        <!--Salary Rule HDMF Loan-->
+        <record id="hr_rule_hdmfloan" model="hr.salary.rule">
+            <field name="name">HDMF Loan</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.LOANS"/>
+            <field name="code">HDMFLOAN</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'hdmf').mapped('amount_deduct'))</field>
+            <field name="sequence" eval="710"/>
+        </record>
+
+        <!--Salary Rule Other Loan-->
+        <record id="hr_rule_othloan" model="hr.salary.rule">
+            <field name="name">Other Loan</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.LOANS"/>
+            <field name="code">OTHLOAN</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'other').mapped('amount_deduct'))</field>
+            <field name="sequence" eval="720"/>
+        </record>
+        
+    </data>
+</odoo>

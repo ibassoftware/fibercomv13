@@ -1,0 +1,26 @@
+<odoo>
+<data>
+    <record id="ibas_hr_payslip_view_form" model="ir.ui.view">
+        <field name="name">ibas.hr.payslip.view.form</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]" position='after'>
+                <group col="4" colspan="4">
+                    <group col="2" colspan="2">
+                        <field name='deduct_sss'/>
+                        <field name='deduct_hdmf'/>
+                        <field name='deduct_philhealth'/>
+                    </group>
+                    <group col="2" colspan="2">
+                        <field name='deduct_mpl'/>
+                        <field name='generate_backpay'/>
+                        <field name='deduct_healthcard'/>
+                    </group>
+               
+                </group>
+            </xpath>
+        </field>
+    </record>
+</data>
+</odoo>
