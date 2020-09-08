@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_ibas_fibercom_ibas_fibercom,ibas_fibercom.ibas_fibercom,model_ibas_fibercom_ibas_fibercom,,1,0,0,0
+
+access_ibas_fibercom_hr_loan,ibas_fibercom.ibas_hr_loan,model_hr_loan,base.group_user,1,1,1,1
