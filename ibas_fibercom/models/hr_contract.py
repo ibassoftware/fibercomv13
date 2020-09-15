@@ -43,15 +43,22 @@ class IbasHRContract(models.Model):
 
     probationary_period = fields.Float(string='Probationary Period in Months')
 
+    # Allowance
+    rice_allowance = fields.Float(string="Rice Allowance")
+    clothing_allowance = fields.Float(string="Clothing Allowance")
+    per_diem = fields.Float(string="Per Diem")
+    internet_allowance = fields.Float(string="Internet Allowance")
+    other_allowance = fields.Float(string="Other Allowance")
+
     # Statutory Contribution
 
-    sss_ec = fields.Float(string='SSS EC', compute='_compute_sss')
-    sss_er = fields.Float(string='SSS ER', compute='_compute_sss')
-    sss_ee = fields.Float(string='SSS EE', compute='_compute_sss')
+    sss_ec = fields.Float(string='SSS EC')
+    sss_er = fields.Float(string='SSS ER')
+    sss_ee = fields.Float(string='SSS EE')
     philhealth_personal = fields.Float(
-        string='Philhealth Personal Share', compute='_compute_philhealth')
+        string='Philhealth Personal Share')
     philhealth_company = fields.Float(
-        string='Philhealth Company Share', compute='_compute_philhealth')
+        string='Philhealth Company Share')
     hdmf_personal = fields.Float(string='HDMF Personal Share', default=100)
     hdmf_company = fields.Float(string='HDMF Company Share', default=100)
 
@@ -67,8 +74,8 @@ class IbasHRContract(models.Model):
         ('daily', 'Daily'),
     ], string='Scheduled Pay', default='monthly', help="Defines the frequency of the wage payment.")
 
-    @api.depends('wage')
-    def _compute_philhealth(self):
+    @api.onchange('wage')
+    def _onchange_philhealth(self):
         for rec in self:
             rec.philhealth_personal = (rec.wage * 0.03) / 2
             rec.philhealth_company = (rec.wage * 0.03) / 2
@@ -110,8 +117,8 @@ class IbasHRContract(models.Model):
             whole = whole.replace(',', '')
             rec.daily_wage_in_words = whole.upper() + " ONLY"
 
-    @api.depends('wage')
-    def _compute_sss(self):
+    @api.onchange('wage')
+    def _onchange_sss(self):
         for rec in self:
             if rec.wage <= 0:
                 rec.sss_er = 0
