@@ -39,6 +39,7 @@
         'views/product.xml',
         'views/hr_employee_views.xml',
         'views/hr_contract_views.xml',
+        'views/hr_contract_type_views.xml',
         'views/hr_payslip_views.xml',
         'views/hr_loan_views.xml',
         'report/delivery_slip.xml',
