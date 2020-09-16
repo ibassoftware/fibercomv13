@@ -24,7 +24,7 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
         'data/report_paperformat_data.xml',
         'data/wk_printer.xml',
@@ -39,7 +39,9 @@
         'views/product.xml',
         'views/hr_employee_views.xml',
         'views/hr_contract_views.xml',
+        'views/hr_contract_type_views.xml',
         'views/hr_payslip_views.xml',
+        'views/hr_loan_views.xml',
         'report/delivery_slip.xml',
         'report/purchase_order.xml',
         'report/report_account_stp.xml',
