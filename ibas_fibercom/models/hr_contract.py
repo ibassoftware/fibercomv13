@@ -19,7 +19,7 @@ class IbasHRPayrollStructure(models.Model):
 class IbasHRContract(models.Model):
     _inherit = 'hr.contract'
 
-    type_id = fields.Char(string='Contract Type')
+    type_id = fields.Many2one('hr.contract.type', string='Contract Type')
     struct_id = fields.Many2one(
         'hr.payroll.structure', string='Salary Structure')
 
