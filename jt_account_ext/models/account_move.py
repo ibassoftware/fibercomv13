@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
@@ -21,5 +22,10 @@
 #
 ##############################################################################
 
-from . import payment_vocher
-from . import account_move
+from odoo import api, fields, models
+
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    ref_ext = fields.Char(string='Extra Reference')
+
