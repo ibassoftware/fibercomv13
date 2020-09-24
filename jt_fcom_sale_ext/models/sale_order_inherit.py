@@ -151,7 +151,7 @@ class StockPicking(models.Model):
                 [('picking_id', '=', rec.id)])
 
             sale_order = self.env['sale.order'].search(
-                [('id', '=', self.sale_id.id)])
+                [('id', '=', rec.sale_id.id)])
 
             if rec.state == 'assigned' and rec.backorder_id:
                 rec.ibas_mrf_sale_order_status = 'partial'
