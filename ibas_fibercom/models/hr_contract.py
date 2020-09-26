@@ -319,3 +319,12 @@ class IbasHRContract(models.Model):
         if self:
             self.total_compensation = sum([self.wage, self.rice_allowance, self.clothing_allowance, self.per_diem,
                                            self.internet_allowance, self.other_allowance, self.reimbursable_transportation_allowance])
+
+    def _get_work_entries_values(self, date_start, date_stop):
+        vals_list = super(IbasHRContract, self)._get_work_entries_values(date_start, date_stop)
+
+        work_entry_type_id = self.env.ref('hr_work_entry.work_entry_type_attendance').id
+        for vals in vals_list:
+            vals['work_entry_type_id'] = work_entry_type_id
+
+        return vals_list
