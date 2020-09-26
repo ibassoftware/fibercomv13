@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="ibas_payroll_hr_work_entry_type_view_form_inherit" model="ir.ui.view">
+            <field name="name">ibas.payroll.hr.work.entry.type.view.form.inherit</field>
+            <field name="model">hr.work.entry.type</field>
+            <field name="inherit_id" ref="hr_payroll.payroll_hr_work_entry_type_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[2]/group" position="after">
+                    <group>
+                        <field name="is_payslip_display"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

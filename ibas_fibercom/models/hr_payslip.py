@@ -17,3 +17,17 @@ class IbasHrPayslip(models.Model):
     deduct_mpl = fields.Boolean(string='Deduct MPL')
     generate_backpay = fields.Boolean(string='Generate 13th Month Pay/BackPay')
     deduct_healthcard = fields.Boolean(string='Deduct Healthcard')
+
+    def _get_worked_day_lines(self):
+        res = super(IbasHrPayslip, self)._get_worked_day_lines()
+
+        new_res = []
+        for result in res:
+            work_entry_type_id = result['work_entry_type_id']
+            work_entry_type_record = self.env['hr.work.entry.type'].browse(work_entry_type_id)
+            is_payslip_display = work_entry_type_record.is_payslip_display
+
+            if is_payslip_display:
+                new_res.append(result)
+
+        return new_res

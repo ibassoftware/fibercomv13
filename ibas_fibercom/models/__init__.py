@@ -10,3 +10,4 @@ from . import hr_contract_type
 from . import hr_payslip
 from . import hr_loan
 from . import purchase_order
+from . import hr_work_entry_type

@@ -43,6 +43,7 @@
         'views/hr_contract_type_views.xml',
         'views/hr_payslip_views.xml',
         'views/hr_loan_views.xml',
+        'views/hr_work_entry_type_views.xml',
         'report/delivery_slip.xml',
         'report/purchase_order.xml',
         'report/report_account_stp.xml',
