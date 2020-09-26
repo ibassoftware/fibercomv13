@@ -30,7 +30,8 @@ class IbasHRContract(models.Model):
 
     work_days = fields.Selection([
         ('six', 'Six Days'),
-        ('five', 'Five Days')
+        ('five', 'Five Days'),
+        ('five_1/2', 'Five and a half Days')
     ], string='Work Days')
 
     daily_wage = fields.Float(
@@ -91,6 +92,8 @@ class IbasHRContract(models.Model):
                 daily = (wage * 12) / 313
             elif rec.work_days == 'five':
                 daily = (wage * 12) / 261
+            elif rec.work_days == 'five_1/2':
+                daily = (wage * 12) / 288
             else:
                 daily = 0
 
