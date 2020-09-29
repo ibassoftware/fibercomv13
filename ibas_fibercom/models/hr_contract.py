@@ -19,7 +19,7 @@ class IbasHRPayrollStructure(models.Model):
 class IbasHRContract(models.Model):
     _inherit = 'hr.contract'
 
-    type_id = fields.Char(string='Contract Type')
+    type_id = fields.Many2one('hr.contract.type', string='Contract Type')
     struct_id = fields.Many2one(
         'hr.payroll.structure', string='Salary Structure')
 
@@ -30,7 +30,8 @@ class IbasHRContract(models.Model):
 
     work_days = fields.Selection([
         ('six', 'Six Days'),
-        ('five', 'Five Days')
+        ('five', 'Five Days'),
+        ('five_1/2', 'Five and a half Days')
     ], string='Work Days')
 
     daily_wage = fields.Float(
@@ -73,6 +74,9 @@ class IbasHRContract(models.Model):
         ('per-trip', 'Per-Trip'),
         ('daily', 'Daily'),
     ], string='Scheduled Pay', default='monthly', help="Defines the frequency of the wage payment.")
+    reimbursable_transportation_allowance = fields.Monetary(string="Reimbursable Transportation Allowance", readonly=False)
+    total_compensation = fields.Float(string="Total Compensation", compute='_compute_total_compensation', store=True)
+    last_salary_adjustment = fields.Date(string="Last Salaray adjustment")
 
     @api.onchange('wage')
     def _onchange_philhealth(self):
@@ -88,6 +92,8 @@ class IbasHRContract(models.Model):
                 daily = (wage * 12) / 313
             elif rec.work_days == 'five':
                 daily = (wage * 12) / 261
+            elif rec.work_days == 'five_1/2':
+                daily = (wage * 12) / 288
             else:
                 daily = 0
 
@@ -309,3 +315,19 @@ class IbasHRContract(models.Model):
                 rec.sss_er = 1600
                 rec.sss_ee = 800
                 rec.sss_ec = 30
+
+    @api.depends('wage', 'rice_allowance', 'clothing_allowance', 'per_diem', 'internet_allowance', 'other_allowance',
+                  'reimbursable_transportation_allowance')
+    def _compute_total_compensation(self):
+        if self:
+            self.total_compensation = sum([self.wage, self.rice_allowance, self.clothing_allowance, self.per_diem,
+                                           self.internet_allowance, self.other_allowance, self.reimbursable_transportation_allowance])
+
+    def _get_work_entries_values(self, date_start, date_stop):
+        vals_list = super(IbasHRContract, self)._get_work_entries_values(date_start, date_stop)
+
+        work_entry_type_id = self.env.ref('hr_work_entry.work_entry_type_attendance').id
+        for vals in vals_list:
+            vals['work_entry_type_id'] = work_entry_type_id
+
+        return vals_list

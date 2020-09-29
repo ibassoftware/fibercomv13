@@ -33,6 +33,7 @@
     'data': [
         'views/payment_view.xml',
         'report/payment_report.xml',
+        'views/account_move.xml'
     ],
     'application': False,
     'installable': True,
