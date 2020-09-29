@@ -91,7 +91,7 @@
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute"> result = 0.0
+            <field name="amount_python_compute">result = 0.0
 if contract.scheduled_pay == 'daily':
     result = contract.wage /4
 if contract.scheduled_pay == 'weekly':
@@ -129,8 +129,9 @@ if contract.scheduled_pay == 'bi-monthly':
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">
-            result = inputs.INPADDALL.amount
+            <field name="amount_python_compute">result = 0
+if inputs.INPADDALL:
+    result = inputs.INPADDALL.amount
             </field>
             <field name="sequence" eval="100"/>
         </record> 
@@ -162,17 +163,17 @@ if contract.scheduled_pay == 'bi-monthly':
         </record>
 
         <!--Salary Rule TRIPS-->
-        <record id="hr_rule_trips" model="hr.salary.rule">
-            <field name="name">TRIPS</field>
-            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
-            <field name="category_id" ref="hr_payroll.GROSS"/>
-            <field name="code">TRIP</field>
-            <field name="appears_on_payslip" eval="True"/>
-            <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = sum(employee.trip_ids.filtered(lambda r: r.date &gt;= payslip.date_from and r.date &lt;= payslip.date_to).mapped('amount'))</field>
-            <field name="sequence" eval="120"/>
-        </record>
+<!--        <record id="hr_rule_trips" model="hr.salary.rule">-->
+<!--            <field name="name">TRIPS</field>-->
+<!--            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>-->
+<!--            <field name="category_id" ref="hr_payroll.GROSS"/>-->
+<!--            <field name="code">TRIP</field>-->
+<!--            <field name="appears_on_payslip" eval="True"/>-->
+<!--            <field name="condition_select">none</field>-->
+<!--            <field name="amount_select">code</field>-->
+<!--            <field name="amount_python_compute">result = sum(employee.trip_ids.filtered(lambda r: r.date &gt;= payslip.date_from and r.date &lt;= payslip.date_to).mapped('amount'))</field>-->
+<!--            <field name="sequence" eval="120"/>-->
+<!--        </record>-->
 
         <!--Salary Rule Philhealth Personal Share-->
         <record id="hr_rule_philee" model="hr.salary.rule">
@@ -274,7 +275,7 @@ if contract.schedule_pay == 'monthly':
     if 166667 &lt;= gross &lt;= 666666:
         result = 40833.33 + (0.32 * (gross - 166667))
     if 666667 &lt;= gross:
-result = 200833.33 + (0.35 * (gross - 666667))</field>
+        result = 200833.33 + (0.35 * (gross - 666667))</field>
             <field name="sequence" eval="340"/>
         </record>
 
@@ -287,7 +288,10 @@ result = 200833.33 + (0.35 * (gross - 666667))</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = worked_days.LATE.number_of_hours * (contract.daily_wage / 8)</field>
+            <field name="amount_python_compute">result = 0
+if worked_days.LATE:
+    result = worked_days.LATE.number_of_hours * (contract.daily_wage / 8)
+            </field>
             <field name="sequence" eval="350"/>
         </record>
 
@@ -300,7 +304,10 @@ result = 200833.33 + (0.35 * (gross - 666667))</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = worked_days.ABSENT.number_of_days * contract.daily_wage</field>
+            <field name="amount_python_compute">result = 0
+if worked_days.ABSENT:
+    result = worked_days.ABSENT.number_of_days * contract.daily_wage
+            </field>
             <field name="sequence" eval="360"/>
         </record>
         
@@ -313,7 +320,10 @@ result = 200833.33 + (0.35 * (gross - 666667))</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = worked_days.UNDERTIME.number_of_hours * (contract.daily_wage / 8)</field>
+            <field name="amount_python_compute">result = 0
+if worked_days.UNDERTIME:
+    result = worked_days.UNDERTIME.number_of_hours * (contract.daily_wage / 8)
+            </field>
             <field name="sequence" eval="351"/>
         </record>     
 
@@ -410,11 +420,17 @@ result = 200833.33 + (0.35 * (gross - 666667))</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = 0.0
 hourly_rate = contract.daily_wage / 8
-result += hourly_rate * worked_days.RD.number_of_hours * 1.3
-result += hourly_rate * worked_days.SH.number_of_hours * 1.3
-result += hourly_rate * worked_days.RH.number_of_hours * 1.2
-result += hourly_rate * worked_days.RDSH.number_of_hours * 1.5
-result += hourly_rate * worked_days.RDRH.number_of_hours * 2.6</field>
+if worked_days.RDOT:
+    result += hourly_rate * worked_days.RDOT.number_of_hours * 1.3
+if worked_days.SHOT:
+    result += hourly_rate * worked_days.SHOT.number_of_hours * 1.3
+if worked_days.RHOT:
+    result += hourly_rate * worked_days.RHOT.number_of_hours * 1.2
+if worked_days.RDSHOT:
+    result += hourly_rate * worked_days.RDSHOT.number_of_hours * 1.5
+if worked_days.RDRHOT:
+    result += hourly_rate * worked_days.RDRHOT.number_of_hours * 2.6
+            </field>
             <field name="sequence" eval="10"/>
         </record>
 
@@ -429,12 +445,19 @@ result += hourly_rate * worked_days.RDRH.number_of_hours * 2.6</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = 0.0
 hourly_rate = contract.daily_wage / 8
-result += hourly_rate * worked_days.OT.number_of_hours * 1.25
-result += hourly_rate * worked_days.RDOT.number_of_hours * 1.69
-result += hourly_rate * worked_days.SHOT.number_of_hours * 1.69
-result += hourly_rate * worked_days.RHOT.number_of_hours * 2.6
-result += hourly_rate * worked_days.RDSHOT.number_of_hours * 1.95
-result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
+if worked_days.OT:
+    result += hourly_rate * worked_days.OT.number_of_hours * 1.25
+if worked_days.RDOT:
+    result += hourly_rate * worked_days.RDOT.number_of_hours * 1.69
+if worked_days.SHOT:
+    result += hourly_rate * worked_days.SHOT.number_of_hours * 1.69
+if worked_days.RHOT:
+    result += hourly_rate * worked_days.RHOT.number_of_hours * 2.6
+if worked_days.RDSHOT:
+    result += hourly_rate * worked_days.RDSHOT.number_of_hours * 1.95
+if worked_days.RDRHOT:
+    result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38
+            </field>
             <field name="sequence" eval="20"/>
         </record>
 
@@ -447,7 +470,10 @@ result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = inputs.INPADJ.amount</field>
+            <field name="amount_python_compute">result = 0
+if inputs.INPADJ:
+    result = inputs.INPADJ.amount
+            </field>
             <field name="sequence" eval="500"/>
         </record>
 
@@ -460,7 +486,10 @@ result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">none</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = inputs.INPADV.amount</field>
+            <field name="amount_python_compute">result = 0
+if inputs.INPADV:
+    result = inputs.INPADV.amount
+            </field>
             <field name="sequence" eval="600"/>
         </record>
 
@@ -471,7 +500,8 @@ result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
             <field name="category_id" ref="ibas_fibercom.LOANS"/>
             <field name="code">SSSLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
-            <field name="condition_select">none</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.is_deduct_loans</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'sss').mapped('amount_deduct'))</field>
             <field name="sequence" eval="700"/>
@@ -484,7 +514,8 @@ result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
             <field name="category_id" ref="ibas_fibercom.LOANS"/>
             <field name="code">HDMFLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
-            <field name="condition_select">none</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.is_deduct_loans</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'hdmf').mapped('amount_deduct'))</field>
             <field name="sequence" eval="710"/>
@@ -497,7 +528,8 @@ result += hourly_rate * worked_days.RDRHOT.number_of_hours * 3.38 </field>
             <field name="category_id" ref="ibas_fibercom.LOANS"/>
             <field name="code">OTHLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
-            <field name="condition_select">none</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.is_deduct_loans</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'other').mapped('amount_deduct'))</field>
             <field name="sequence" eval="720"/>

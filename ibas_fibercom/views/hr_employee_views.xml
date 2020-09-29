@@ -53,8 +53,18 @@
                 <field name="philhealth"/>
                 <field name="pagibig"/>
                 </group>
+                <group name="bank_information" string="Bank Information">
+                    <field name="bank"/>
+                    <field name="account_number"/>
+                </group>
             </group>
             </xpath>
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page name="loans" string="Loans" groups="hr.group_hr_user">
+                    <field name="loan_ids"/>
+                </page>
+            </xpath>
+
 
            
         </field>

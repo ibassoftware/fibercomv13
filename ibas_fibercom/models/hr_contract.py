@@ -77,6 +77,8 @@ class IbasHRContract(models.Model):
     reimbursable_transportation_allowance = fields.Monetary(string="Reimbursable Transportation Allowance", readonly=False)
     total_compensation = fields.Float(string="Total Compensation", compute='_compute_total_compensation', store=True)
     last_salary_adjustment = fields.Date(string="Last Salaray adjustment")
+    mpl = fields.Float(string="MPL")
+    health_card = fields.Float(string="Health Card")
 
     @api.onchange('wage')
     def _onchange_philhealth(self):
@@ -319,9 +321,9 @@ class IbasHRContract(models.Model):
     @api.depends('wage', 'rice_allowance', 'clothing_allowance', 'per_diem', 'internet_allowance', 'other_allowance',
                   'reimbursable_transportation_allowance')
     def _compute_total_compensation(self):
-        if self:
-            self.total_compensation = sum([self.wage, self.rice_allowance, self.clothing_allowance, self.per_diem,
-                                           self.internet_allowance, self.other_allowance, self.reimbursable_transportation_allowance])
+        for rec in  self:
+            rec.total_compensation = sum([rec.wage, rec.rice_allowance, rec.clothing_allowance, rec.per_diem,
+                                           rec.internet_allowance, rec.other_allowance, rec.reimbursable_transportation_allowance])
 
     def _get_work_entries_values(self, date_start, date_stop):
         vals_list = super(IbasHRContract, self)._get_work_entries_values(date_start, date_stop)
