@@ -20,11 +20,12 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'stock', 'purchase', 'asset', 'hr', 'hr_payroll'],
+    'depends': ['base', 'sale', 'stock', 'purchase', 'asset', 'hr', 'hr_payroll', 'hr_holidays'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'security/time_off_security.xml',
         'data/ir_sequence_data.xml',
         'data/report_paperformat_data.xml',
         'data/wk_printer.xml',
@@ -42,6 +43,7 @@
         'views/hr_contract_type_views.xml',
         'views/hr_payslip_views.xml',
         'views/hr_loan_views.xml',
+        'views/hr_work_entry_type_views.xml',
         'report/delivery_slip.xml',
         'report/purchase_order.xml',
         'report/report_account_stp.xml',
