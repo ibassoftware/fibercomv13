@@ -45,6 +45,9 @@ class IbasEmployee(models.Model):
     sss = fields.Char(string='SSS')
     philhealth = fields.Char(string='Philhealth')
     pagibig = fields.Char(string='Pag-IBIG')
+    bank = fields.Char(string="Bank")
+    account_number = fields.Char(string="Account Number")
+    loan_ids = fields.One2many('hr.loan', 'employee_id', string="Loan")
 
     @api.depends('birthday')
     def _cal_dob(self):

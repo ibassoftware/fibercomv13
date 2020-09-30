@@ -11,11 +11,12 @@
                         <field name='deduct_sss'/>
                         <field name='deduct_hdmf'/>
                         <field name='deduct_philhealth'/>
+                        <field name='deduct_mpl'/>
                     </group>
                     <group col="2" colspan="2">
-                        <field name='deduct_mpl'/>
                         <field name='generate_backpay'/>
                         <field name='deduct_healthcard'/>
+                        <field name='is_deduct_loans'/>
                     </group>
                
                 </group>
