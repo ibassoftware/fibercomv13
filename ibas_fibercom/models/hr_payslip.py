@@ -19,6 +19,7 @@ class IbasHrPayslip(models.Model):
     deduct_mpl = fields.Boolean(string='Deduct MPL')
     generate_backpay = fields.Boolean(string='Generate 13th Month Pay/BackPay')
     deduct_healthcard = fields.Boolean(string='Deduct Healthcard')
+    is_deduct_loans = fields.Boolean(string="Deduct loans")
 
     @api.onchange('employee_id', 'struct_id', 'contract_id', 'date_from', 'date_to')
     def _onchange_employee(self):
