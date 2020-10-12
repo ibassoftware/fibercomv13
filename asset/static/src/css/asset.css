@@ -97,3 +97,28 @@
   width: 64px;
   height: 64px;
 }
+
+.plus {
+  --t: 2px; /* Thickness */
+  --l: 40px; /* size of the symbol */
+  --s: 2px; /* space around the symbol */
+  --c1: #000; /* Plus color*/
+  --c2: #fff; /* background color*/
+
+  display: inline-block;
+  border: 1px solid lightgray;
+  width: var(--l);
+  height: var(--l);
+  padding: var(--s);
+  box-sizing: border-box; /*Remove this if you don't want space to be included in the size*/
+
+  background: linear-gradient(var(--c1), var(--c1)) content-box,
+    linear-gradient(var(--c1), var(--c1)) content-box, var(--c2);
+  background-position: center;
+  background-size: 100% var(--t), var(--t) 100%;
+  background-repeat: no-repeat;
+}
+
+.radius {
+  border-radius: 50%;
+}

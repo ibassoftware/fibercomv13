@@ -207,7 +207,7 @@ class asset_asset(models.Model):
     os_product_key = fields.Char('Operating System Product Key')
 
     color = fields.Char('Color')
-    inclusion = fields.Char('Inclusion')
+    inclusion = fields.Char(string='Inclusion', track_visibility='onchange')
     notes = fields.Text('Notes')
 
     # Monitor
@@ -283,15 +283,44 @@ class asset_asset(models.Model):
     item_code = fields.Char(string='Item Code')
     brand_serial_num = fields.Char(string='Brand/Model')
     serial = fields.Char('Serial Number', size=64)
+    product_num = fields.Char(string='Product Number')
+    imei = fields.Char(string='IMEI')
 
     # Tracking
-    date_released = fields.Date(string='Date Released')
+    date_released = fields.Date(string='Date Released', track_visibility='onchange')
     out_issued = fields.Char(string='Out Issued #')
-    date_returned = fields.Date(string='Date Returned')
+    date_returned = fields.Date(string='Date Returned', track_visibility='onchange')
     in_receipt = fields.Char(string='In Receipt #')
 
     # Others
-    remarks = fields.Char(string='Remarks')
+    remarks = fields.Char(string='Remarks', track_visibility='onchange')
+
+
+    #Assiociated Software
+    assiociated_os = fields.Char(string='Assiociated OS')
+    # assiociated_os_product_key = fields.Char(string='Assiociated OS Product Key')
+    assiociated_software = fields.Char(string='Assiociated Software')
+    assiociated_product_key = fields.One2many('asset.assiociated.product.key', 'asset_id', string='Assiociated Product Key')
+    assiociated_type = fields.Char(string='Assiociated Type')
+
+    aos_key_1 = fields.Boolean(string='Aos key 1')
+    aos_key_2 = fields.Boolean(string='Aos key 2')
+    assiociated_os_product_key_1 = fields.Char(string='1')
+    assiociated_os_product_key_2 = fields.Char(string='2')
+   
+    def action_aos_key_1(self):
+        if self.aos_key_1 == False:
+            self.update({'aos_key_1': True})
+        else:
+            self.update({'aos_key_1': False})
+
+
+    def action_aos_key_2(self):
+        if self.aos_key_2 == False:
+            self.update({'aos_key_2': True})
+        else:
+            self.update({'aos_key_2': False})
+
 
     @api.model
     def create(self, vals):
@@ -303,3 +332,11 @@ class asset_asset(models.Model):
         if 'image' in vals:
             vals['image_small'] = vals['image_medium'] = vals['image']
         return super(asset_asset, self).write(vals)
+
+
+class asset_assiociated_product_key(models.Model):
+    _description = "Assiociated Product Key"
+    _name ="asset.assiociated.product.key"
+
+    name = fields.Char(string="Reference")
+    asset_id = fields.Many2one('asset.asset', string="Asset")
