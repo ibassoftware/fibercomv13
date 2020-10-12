@@ -298,7 +298,7 @@ class asset_asset(models.Model):
 
     #Assiociated Software
     assiociated_os = fields.Char(string='Assiociated OS')
-    # assiociated_os_product_key = fields.Char(string='Assiociated OS Product Key')
+   
     assiociated_software = fields.Char(string='Assiociated Software')
     assiociated_product_key = fields.One2many('asset.assiociated.product.key', 'asset_id', string='Assiociated Product Key')
     assiociated_type = fields.Char(string='Assiociated Type')
