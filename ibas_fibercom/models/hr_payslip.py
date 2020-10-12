@@ -50,18 +50,31 @@ class IbasHrPayslip(models.Model):
         else:
             self.warning_message = False
 
-        self.worked_days_line_ids = self._get_new_worked_days_lines()
+        get_worked_days = True
+        if hasattr(self, 'is_imported'):
+            get_worked_days = not self.is_imported
+        if get_worked_days:
+            self.worked_days_line_ids = self._get_new_worked_days_lines()
 
     def _get_worked_day_lines(self):
         res = super(IbasHrPayslip, self)._get_worked_day_lines()
 
         new_res = []
+        work_entry_type_ids = [rec['work_entry_type_id'] for rec in res]
+        entry_types = self.env['hr.work.entry.type'].search(['|', ('id', 'in', work_entry_type_ids), ('is_payslip_display', '=', True)])
+        entries_to_add = entry_types.filtered(lambda rec: rec.id not in work_entry_type_ids)
         for result in res:
             work_entry_type_id = result['work_entry_type_id']
-            work_entry_type_record = self.env['hr.work.entry.type'].browse(work_entry_type_id)
-            is_payslip_display = work_entry_type_record.is_payslip_display
+            is_payslip_display = entry_types.filtered(lambda rec: rec.id == work_entry_type_id).is_payslip_display
 
             if is_payslip_display:
                 new_res.append(result)
 
+        for entry in entries_to_add:
+            new_res.append({'sequence': entry.sequence,
+                            'work_entry_type_id': entry.id,
+                            'number_of_days': 0,
+                            'number_of_hours': 0,
+                            'amount': 0,
+                            })
         return new_res
