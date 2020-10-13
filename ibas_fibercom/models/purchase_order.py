@@ -16,4 +16,7 @@ class PurchaseOrder(models.Model):
             self.approved_by_designation = self.approved_by_id.job_id.name
         if not self.requested_by:
             self.requested_by_designation = self.requested_by_id.job_id.name
-        
+
+    def write(self, vals):
+        vals['date_approve'] = fields.Datetime.now()
+        return super(PurchaseOrder, self).write(vals)

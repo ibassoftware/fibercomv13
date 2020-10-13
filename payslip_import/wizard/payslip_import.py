@@ -31,14 +31,19 @@ class PayslipImport(models.TransientModel):
         data = self.get_data(keys, sheet)
         HR_PAYSLIP = self.env['hr.payslip']
         workdays_code = self.env['hr.work.entry.type'].search_read([('name', 'in', keys)], ['name', 'code'])
+        input_line_ids = self.env['hr.payslip.input.type'].search_read([('name', 'in', keys)], ['name'])
         workdays_code_dict = {}
+        input_line_dict = {}
         values = []
         for code in workdays_code:
             workdays_code_dict[code['name']] = code['id']
+        for input_line in input_line_ids:
+            input_line_dict[input_line['name']] = input_line['id']
         for rec in data:
             employee = self.env['hr.employee'].search([('name', '=', rec['Employees'])])
             if employee:
                 worked_days_entries = []
+                other_input_entries = []
                 for key, value in rec.items():
                     if key == 'Employees':
                         continue
@@ -49,10 +54,16 @@ class PayslipImport(models.TransientModel):
                             'number_of_hours': value*8,
                             'contract_id': employee.contract_id.id
                         }))
+                    elif input_line_dict.get(key, False) in employee.contract_id.struct_id.input_line_type_ids.ids:
+                        other_input_entries.append((0, 0, {
+                            'input_type_id': input_line_dict[key],
+                            'amount': value or 0
+                        }))
                 values.append({
                     'name': employee.name,
                     'employee_id': employee.id,
                     'worked_days_line_ids': worked_days_entries,
+                    'input_line_ids': other_input_entries,
                     'contract_id': employee.contract_id.id,
                     'struct_id': employee.contract_id.struct_id.id,
                     'is_imported': True,
