@@ -199,36 +199,50 @@
                                             <field name="exact_address"/>
                                         </group>
                                 </group>
+                                <group attrs="{'invisible': [('asset_type', '!=', 'server')]}">
+                                        <group>
+                                            <field name="storage_ids" nolabel="1">
+                                                <tree editable="bottom">
+                                                    <field name="name"/>
+                                                    <field name="brand_type" options="{'no_create_edit': True}"/>
+                                                </tree>
+                                            </field>
+                                        </group>
+                                        <group>
+                                            
+                                        </group>
+                                </group>
                                 
                             </page>
                             <page string="Assiociated Software">
                                 <group>
                                     <group>
-                                        <field name="assiociated_os"/>
-                                       
+                                       <field name="assiociated_type"/>
                                     </group>
                                     <group>
-                                        <field name="assiociated_type"/>
+                                        
                                     </group>
                                 </group>
 
                                 <group>
-                                    <group string="Associated Software">
-                                        <button name="action_aos_key_1" class="plus radius" style="--l:15px;--t:1px;--c2:#fff; float: right" type="object"/>
-                                        <field name="assiociated_os_product_key_1" nolabel="1" placeholder="Product Key" attrs="{'invisible': [('aos_key_1', '!=', True)]}"/>
-                                        <field name="aos_key_1" invisible="1"/>
-
-                                        <button name="action_aos_key_2" class="plus radius" style="--l:15px;--t:1px;--c2:#fff; float: right" type="object" attrs="{'invisible': [('aos_key_1', '!=', True)]}"/>
-                                        <field name="assiociated_os_product_key_2" nolabel="1" placeholder="Product Key" attrs="{'invisible': [('aos_key_2', '!=', True)]}"/>
-                                        <field name="aos_key_2" invisible="1"/>
-                                    </group>
-                                    <group string="Associated Product Key">
-                                        <field name="assiociated_product_key" nolabel="1">
+                                   
+                                    <group string="Associated OS">
+                                        <field name="assiociated_os_ids" nolabel="1">
                                             <tree editable="bottom">
                                                 <field name="name"/>
+                                                <field name="assiociated_os" options="{'no_create_edit': True}"/>
                                             </tree>
                                         </field>
                                     </group>
+                                     <group string="Associated Software">
+                                         <field name="assiociated_software_ids" nolabel="1">
+                                            <tree editable="bottom">
+                                                <field name="name"/>
+                                                <field name="assiociated_software" options="{'no_create_edit': True}"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                     
                                 </group>
                                 
                             </page>

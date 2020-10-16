@@ -277,6 +277,7 @@ class asset_asset(models.Model):
         ('network', 'Network'),
         ('ip_phone', 'IP Phone'),
         ('printer', 'Printer'),
+        ('server', 'Server'),
     ], string="Asset Type")
 
     # Asset Information
@@ -295,31 +296,15 @@ class asset_asset(models.Model):
     # Others
     remarks = fields.Char(string='Remarks', track_visibility='onchange')
 
+    #Storage
+    storage_ids = fields.One2many('asset.storage', 'asset_id', string='Storage')
 
     #Assiociated Software
-    assiociated_os = fields.Char(string='Assiociated OS')
+    assiociated_os_ids = fields.One2many('asset.assiociated.os', 'asset_id', string='Assiociated OS')
+    assiociated_software_ids = fields.One2many('asset.assiociated.software', 'asset_id', string='Assiociated Software')
    
-    assiociated_software = fields.Char(string='Assiociated Software')
-    assiociated_product_key = fields.One2many('asset.assiociated.product.key', 'asset_id', string='Assiociated Product Key')
     assiociated_type = fields.Char(string='Assiociated Type')
 
-    aos_key_1 = fields.Boolean(string='Aos key 1')
-    aos_key_2 = fields.Boolean(string='Aos key 2')
-    assiociated_os_product_key_1 = fields.Char(string='1')
-    assiociated_os_product_key_2 = fields.Char(string='2')
-   
-    def action_aos_key_1(self):
-        if self.aos_key_1 == False:
-            self.update({'aos_key_1': True})
-        else:
-            self.update({'aos_key_1': False})
-
-
-    def action_aos_key_2(self):
-        if self.aos_key_2 == False:
-            self.update({'aos_key_2': True})
-        else:
-            self.update({'aos_key_2': False})
 
 
     @api.model
@@ -333,10 +318,30 @@ class asset_asset(models.Model):
             vals['image_small'] = vals['image_medium'] = vals['image']
         return super(asset_asset, self).write(vals)
 
+class asset_storage(models.Model):
+    _description = "Assiociated Storage"
+    _name ="asset.storage"
 
-class asset_assiociated_product_key(models.Model):
-    _description = "Assiociated Product Key"
-    _name ="asset.assiociated.product.key"
+    name = fields.Char(string="Storage Serial Number")
+    brand_type = fields.Char(string="Storage Brand/type")
 
-    name = fields.Char(string="Reference")
+    asset_id = fields.Many2one('asset.asset', string="Asset")
+
+class asset_assiociated_os(models.Model):
+    _description = "Assiociated OS"
+    _name ="asset.assiociated.os"
+
+    name = fields.Char(string="Associated OS Product Key")
+    assiociated_os = fields.Many2one('asset.asset', string="Assiociated OS")
+
+    asset_id = fields.Many2one('asset.asset', string="Asset")
+
+
+class asset_assiociated_software(models.Model):
+    _description = "Assiociated Software"
+    _name ="asset.assiociated.software"
+
+    name = fields.Char(string="Associated Product Key")
+    assiociated_software = fields.Many2one('asset.asset', string="Assiociated Software")
+
     asset_id = fields.Many2one('asset.asset', string="Asset")
