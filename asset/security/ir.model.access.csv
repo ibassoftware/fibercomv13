@@ -13,6 +13,14 @@ access_asset_type_manager,asset.type manager,model_asset_type,asset.group_mro_ma
 access_asset_type_user,asset.type user,model_asset_type,asset.group_mro_user,1,0,0,0
 access_asset_type_customer,asset.type customer,model_asset_type,asset.group_mro_customer,1,0,0,0
 
-access_asset_assiociated_product_key_manager,asset assiociated product key manager,model_asset_assiociated_product_key,asset.group_mro_manager,1,1,1,1
-access_asset_assiociated_product_key_user,asset assiociated product key user,model_asset_assiociated_product_key,asset.group_mro_user,1,1,1,0
-access_asset_assiociated_product_key_customer,asset assiociated product key customer,model_asset_assiociated_product_key,asset.group_mro_customer,1,0,0,0
+access_asset_assiociated_os_manager,asset assiociated os manager,model_asset_assiociated_os,asset.group_mro_manager,1,1,1,1
+access_asset_assiociated_os_user,asset assiociated os user,model_asset_assiociated_os,asset.group_mro_user,1,1,1,0
+access_asset_assiociated_os_customer,asset assiociated os customer,model_asset_assiociated_os,asset.group_mro_customer,1,0,0,0
+
+access_asset_assiociated_software_manager,asset assiociated software manager,model_asset_assiociated_software,asset.group_mro_manager,1,1,1,1
+access_asset_assiociated_software_user,asset assiociated software user,model_asset_assiociated_software,asset.group_mro_user,1,1,1,0
+access_asset_assiociated_software_customer,asset assiociated software customer,model_asset_assiociated_software,asset.group_mro_customer,1,0,0,0
+
+access_asset_storage_manager,asset storage manager,model_asset_storage,asset.group_mro_manager,1,1,1,1
+access_asset_storage_user,asset storage user,model_asset_storage,asset.group_mro_user,1,1,1,0
+access_asset_storage_customer,asset storage customer,model_asset_storage,asset.group_mro_customer,1,0,0,0
