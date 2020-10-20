@@ -13,13 +13,13 @@ _logger = logging.getLogger(__name__)
 class IbasHrPayslip(models.Model):
     _inherit = 'hr.payslip'
 
-    deduct_sss = fields.Boolean(string='Deduct SSS')
-    deduct_hdmf = fields.Boolean(string='Deduct HDMF')
-    deduct_philhealth = fields.Boolean(string='Deduct Philhealth')
-    deduct_mpl = fields.Boolean(string='Deduct MPL')
+    deduct_sss = fields.Boolean(string='Deduct SSS', default=True)
+    deduct_hdmf = fields.Boolean(string='Deduct HDMF', default=True)
+    deduct_philhealth = fields.Boolean(string='Deduct Philhealth', default=True)
+    deduct_mpl = fields.Boolean(string='Deduct MPL', default=True)
     generate_backpay = fields.Boolean(string='Generate 13th Month Pay/BackPay')
-    deduct_healthcard = fields.Boolean(string='Deduct Healthcard')
-    is_deduct_loans = fields.Boolean(string="Deduct loans")
+    deduct_healthcard = fields.Boolean(string='Deduct Healthcard', default=True)
+    is_deduct_loans = fields.Boolean(string="Deduct loans", default=True)
 
     @api.onchange('employee_id', 'struct_id', 'contract_id', 'date_from', 'date_to')
     def _onchange_employee(self):
@@ -50,18 +50,62 @@ class IbasHrPayslip(models.Model):
         else:
             self.warning_message = False
 
-        self.worked_days_line_ids = self._get_new_worked_days_lines()
+        get_worked_days = True
+        if hasattr(self, 'is_imported'):
+            get_worked_days = not self.is_imported
+        if get_worked_days:
+            self.worked_days_line_ids = self._get_new_worked_days_lines()
+            self.input_line_ids = self._get_new_input_lines()
+
+    def _get_new_input_lines(self):
+        if self.struct_id.input_line_type_ids:
+            input_lines = self._get_input_lines()
+            input_line_ids = self.input_line_ids.browse([])
+            for r in input_lines:
+                input_line_ids |= input_line_ids.new(r)
+            return input_line_ids
+        else:
+            return [(5, False, False)]
+
+    def _get_input_lines(self):
+        lines = []
+        for rec in self.struct_id.input_line_type_ids:
+            lines.append({
+                'input_type_id': rec.id
+            })
+        return lines
 
     def _get_worked_day_lines(self):
         res = super(IbasHrPayslip, self)._get_worked_day_lines()
 
         new_res = []
+        work_entry_type_ids = [rec['work_entry_type_id'] for rec in res]
+        entry_types = self.env['hr.work.entry.type'].search(['|', ('id', 'in', work_entry_type_ids), ('is_payslip_display', '=', True)])
+        entries_to_add = entry_types.filtered(lambda rec: rec.id not in work_entry_type_ids)
         for result in res:
             work_entry_type_id = result['work_entry_type_id']
-            work_entry_type_record = self.env['hr.work.entry.type'].browse(work_entry_type_id)
-            is_payslip_display = work_entry_type_record.is_payslip_display
+            is_payslip_display = entry_types.filtered(lambda rec: rec.id == work_entry_type_id).is_payslip_display
 
             if is_payslip_display:
                 new_res.append(result)
 
+        for entry in entries_to_add:
+            new_res.append({'sequence': entry.sequence,
+                            'work_entry_type_id': entry.id,
+                            'number_of_days': 0,
+                            'number_of_hours': 0,
+                            'amount': 0,
+                            })
         return new_res
+
+
+class HrPayslipWorkedDays(models.Model):
+    _inherit = 'hr.payslip.worked_days'
+
+    @api.onchange('number_of_days')
+    def _onchange_number_of_days(self):
+        self.number_of_hours = self.number_of_days * 8
+
+    @api.onchange('number_of_hours')
+    def _onchange_number_of_hours(self):
+        self.number_of_days = self.number_of_hours / 8
