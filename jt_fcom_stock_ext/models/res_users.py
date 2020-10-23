@@ -21,6 +21,7 @@
 #
 ##############################################################################
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
 class ResUsers(models.Model):
@@ -41,3 +42,9 @@ class ResUsers(models.Model):
             user.warehouse_company_ids = [(6, 0, company_ids)]
 
     flag_wh_comp_count = fields.Boolean(string="Flag Warehouse Companies Count", store=True, compute="_compute_flag_wh_comp_count", company_dependent=False, check_company=False)
+
+    @api.onchange('warehouse_ids')
+    def _onchange_warehouse_ids(self):
+        for rec in self:
+            if len(rec.warehouse_ids) > 1:
+                raise ValidationError('1 warehouse can be assigned only!')

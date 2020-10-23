@@ -123,6 +123,7 @@
                                     <group>
                                         <field name="remarks" string="Notes"/>
                                         <field name="inclusion"/>
+                                        <field name="purpose"/>
                                         <!-- <field name="notes"/> -->
                                     </group>
                                 </group>  

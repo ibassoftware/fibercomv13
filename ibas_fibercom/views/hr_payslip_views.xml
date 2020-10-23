@@ -21,6 +21,10 @@
                
                 </group>
             </xpath>
+
+            <xpath expr="//field[@name='worked_days_line_ids']/tree/field[@name='number_of_hours']" position="after">
+                <field name="number_of_minutes"/>
+            </xpath>
         </field>
     </record>
 </data>
