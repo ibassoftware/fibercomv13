@@ -56,7 +56,6 @@ class IbasHrPayslip(models.Model):
         res = super(IbasHrPayslip, self)._get_worked_day_lines()
 
         new_res = []
-        import pdb; pdb.set_trace()
         for result in res:
             work_entry_type_id = result['work_entry_type_id']
             work_entry_type_record = self.env['hr.work.entry.type'].browse(work_entry_type_id)
