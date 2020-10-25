@@ -292,6 +292,7 @@ class asset_asset(models.Model):
 
     # Others
     remarks = fields.Char(string='Remarks')
+    purpose = fields.Char(string="Purpose")
 
     @api.model
     def create(self, vals):

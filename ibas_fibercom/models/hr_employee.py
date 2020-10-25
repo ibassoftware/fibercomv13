@@ -48,6 +48,7 @@ class IbasEmployee(models.Model):
     bank = fields.Char(string="Bank")
     account_number = fields.Char(string="Account Number")
     loan_ids = fields.One2many('hr.loan', 'employee_id', string="Loan")
+    parent_id = fields.Many2one('hr.employee', 'Manager', domain="[]")
 
     @api.depends('birthday')
     def _cal_dob(self):
@@ -97,3 +98,8 @@ class IbasEmployee(models.Model):
 
     asset_ids = fields.One2many(
         'asset.asset', 'employee_id', string='Asset Ids')
+
+# class IbasEmployeeBase(models.Model):
+#     _inherit = 'hr.employee.base'
+
+    parent_id = fields.Many2one('hr.employee', 'Manager', domain="[]")
