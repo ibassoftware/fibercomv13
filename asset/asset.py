@@ -298,13 +298,13 @@ class asset_asset(models.Model):
 
     #Storage
     storage_ids = fields.One2many('asset.storage', 'asset_id', string='Storage')
+    purpose = fields.Char(string="Purpose")
 
     #Assiociated Software
     assiociated_os_ids = fields.One2many('asset.assiociated.os', 'asset_id', string='Assiociated OS')
     assiociated_software_ids = fields.One2many('asset.assiociated.software', 'asset_id', string='Assiociated Software')
-   
-    assiociated_type = fields.Char(string='Assiociated Type')
 
+    assiociated_type = fields.Char(string='Assiociated Type')
 
 
     @api.model

@@ -85,6 +85,7 @@ class IbasHrPayslip(models.Model):
         for result in res:
             work_entry_type_id = result['work_entry_type_id']
             is_payslip_display = entry_types.filtered(lambda rec: rec.id == work_entry_type_id).is_payslip_display
+            result['number_of_minutes'] = result['number_of_days'] * (result['number_of_hours'] * 60)
 
             if is_payslip_display:
                 new_res.append(result)
@@ -101,6 +102,8 @@ class IbasHrPayslip(models.Model):
 
 class HrPayslipWorkedDays(models.Model):
     _inherit = 'hr.payslip.worked_days'
+
+    number_of_minutes = fields.Float(string='Number of Minutes')
 
     @api.onchange('number_of_days')
     def _onchange_number_of_days(self):
