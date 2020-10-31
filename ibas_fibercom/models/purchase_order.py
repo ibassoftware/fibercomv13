@@ -7,6 +7,8 @@ class PurchaseOrder(models.Model):
     approved_by_id = fields.Many2one('hr.employee', string="Approved By")
     noted_by_id = fields.Many2one('hr.employee', string="Noted By")
     requested_by_id = fields.Many2one('hr.employee', string='Requested by')
+    general_description = fields.Char(string='General Description')
+    revision_number = fields.Char(string="Revision Number")
     
     @api.onchange('prepared_by_id','approved_by_id','requested_by_id')
     def _get_signatory_details(self):
@@ -18,5 +20,19 @@ class PurchaseOrder(models.Model):
             self.requested_by_designation = self.requested_by_id.job_id.name
 
     def write(self, vals):
-        vals['date_approve'] = fields.Datetime.now()
+        for key, value in vals.items():
+            if key != 'state':
+                field_record = self.env['ir.model.fields'].search([('name', '=', key), ('model_id.model', '=', self._name)])
+                label = field_record.field_description
+                old_value = getattr(self, key)
+                new_value = value
+
+                if not old_value:
+                    old_value = 'Empty'
+                if not new_value:
+                    new_value = 'Empty'
+
+                self.message_post(body="{0}: {1} ----> {2}".format(label, old_value, new_value))
+
+        # vals['date_approve'] = fields.Datetime.now()
         return super(PurchaseOrder, self).write(vals)
