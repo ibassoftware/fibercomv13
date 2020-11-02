@@ -207,7 +207,7 @@ class asset_asset(models.Model):
     os_product_key = fields.Char('Operating System Product Key')
 
     color = fields.Char('Color')
-    inclusion = fields.Char('Inclusion')
+    inclusion = fields.Char(string='Inclusion', track_visibility='onchange')
     notes = fields.Text('Notes')
 
     # Monitor
@@ -277,21 +277,35 @@ class asset_asset(models.Model):
         ('network', 'Network'),
         ('ip_phone', 'IP Phone'),
         ('printer', 'Printer'),
+        ('server', 'Server'),
     ], string="Asset Type")
 
     # Asset Information
     item_code = fields.Char(string='Item Code')
     brand_serial_num = fields.Char(string='Brand/Model')
     serial = fields.Char('Serial Number', size=64)
+    product_num = fields.Char(string='Product Number')
+    imei = fields.Char(string='IMEI')
 
     # Tracking
-    date_released = fields.Date(string='Date Released')
+    date_released = fields.Date(string='Date Released', track_visibility='onchange')
     out_issued = fields.Char(string='Out Issued #')
-    date_returned = fields.Date(string='Date Returned')
+    date_returned = fields.Date(string='Date Returned', track_visibility='onchange')
     in_receipt = fields.Char(string='In Receipt #')
 
     # Others
-    remarks = fields.Char(string='Remarks')
+    remarks = fields.Char(string='Remarks', track_visibility='onchange')
+
+    #Storage
+    storage_ids = fields.One2many('asset.storage', 'asset_id', string='Storage')
+    purpose = fields.Char(string="Purpose")
+
+    #Assiociated Software
+    assiociated_os_ids = fields.One2many('asset.assiociated.os', 'asset_id', string='Assiociated OS')
+    assiociated_software_ids = fields.One2many('asset.assiociated.software', 'asset_id', string='Assiociated Software')
+
+    assiociated_type = fields.Char(string='Assiociated Type')
+
 
     @api.model
     def create(self, vals):
@@ -303,3 +317,31 @@ class asset_asset(models.Model):
         if 'image' in vals:
             vals['image_small'] = vals['image_medium'] = vals['image']
         return super(asset_asset, self).write(vals)
+
+class asset_storage(models.Model):
+    _description = "Assiociated Storage"
+    _name ="asset.storage"
+
+    name = fields.Char(string="Storage Serial Number")
+    brand_type = fields.Char(string="Storage Brand/type")
+
+    asset_id = fields.Many2one('asset.asset', string="Asset")
+
+class asset_assiociated_os(models.Model):
+    _description = "Assiociated OS"
+    _name ="asset.assiociated.os"
+
+    name = fields.Char(string="Associated OS Product Key")
+    assiociated_os = fields.Many2one('asset.asset', string="Assiociated OS")
+
+    asset_id = fields.Many2one('asset.asset', string="Asset")
+
+
+class asset_assiociated_software(models.Model):
+    _description = "Assiociated Software"
+    _name ="asset.assiociated.software"
+
+    name = fields.Char(string="Associated Product Key")
+    assiociated_software = fields.Many2one('asset.asset', string="Assiociated Software")
+
+    asset_id = fields.Many2one('asset.asset', string="Asset")

@@ -346,7 +346,8 @@
                         </p>
                     </div>
                     <div class="col-6">
-                        <p t-field="o.date_order" style="text-align: right;" t-options='{"format": "dd, MMMM yyyy"}'/>
+<!--                        <p t-field="o.date_order" style="text-align: right;" t-options='{"format": "dd, MMMM yyyy"}'/>-->
+                        <p t-field="o.date_approve" style="text-align: right;" t-options='{"format": "dd, MMMM yyyy"}'/>
                         <p t-field="o.project_code" style="text-align: right;"/>
                         <p t-field="o.project_site" style="text-align: right;"/>
                     </div>
