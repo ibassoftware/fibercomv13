@@ -21,6 +21,7 @@
                 <xpath expr="//field[@name='currency_id']" position="after">
 	        		<field name="project_site"/>
 	        		<field name="project_code"/>
+                    <field name="general_description"/>
 	        	</xpath>
                 <xpath expr="//header/button[@name='button_confirm'][1]" position="attributes">
                     <attribute  name="groups">purchase.group_purchase_user</attribute>
@@ -47,6 +48,11 @@
                 <xpath expr="//page/field[@name='order_line']/tree/field[@name='price_unit']" position="replace">
                     <field name="price_unit"/>
                 </xpath>
+
+                <field name="name" position="after">
+                    <field name="revision_number"/>
+                </field>
+                
 	        </field>
 	    </record>
 	</data>
