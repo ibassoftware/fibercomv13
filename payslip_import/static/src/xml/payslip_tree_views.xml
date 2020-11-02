@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="PayslipListView.paylip_import_wizard" t-extend="PayslipListView.print_button">
+        <t t-jquery="button" t-operation="after">
+            <button type="button" class="btn btn-primary btn_payslip_import_wizard">
+                Import Payslips
+            </button>
+        </t>
+    </t>
+</templates>

@@ -42,6 +42,8 @@ class PurchaseOrder(models.Model):
     project_site = fields.Many2one('res.partner', string='Project Site')
     project_code = fields.Many2one(
         'account.analytic.account', string='Project Code')
+    date_approve = fields.Datetime('Confirmation Date', readonly=False, index=True, copy=False)
+
 
     def write(self, vals):
         if vals.get('state') in ['done', 'purchase']:
