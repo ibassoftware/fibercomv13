@@ -54,6 +54,8 @@
                                 <field name="philhealth_company"/>
                                 <field name="hdmf_company"/>
                                 <field name="hdmf_personal"/>
+                                <field name="hdmf_additional"/>
+                                <field name="currency_id" invisible="1"/>
                             </group>
                             <group name="other_deductions" string="Other Deductions">
                                 <field name="mpl"/>

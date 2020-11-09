@@ -99,6 +99,49 @@ class IbasHrPayslip(models.Model):
                             })
         return new_res
 
+    @api.model
+    def create(self, vals):
+        records = super(IbasHrPayslip, self).create(vals)
+        for rec in records:
+            partner = records.employee_id.user_partner_id
+            if not partner:
+                partner = self.env['res.partner'].create({
+                    'name': records.employee_id.name,
+                    'email': records.employee_id.work_email,
+                })
+            rec.message_subscribe(partner_ids=partner.ids)
+        return records
+
+    def action_payslip_send(self):
+        try:
+            template_id = self.env.ref('ibas_fibercom.email_template_hr_payslip').id
+        except:
+            template_id = False
+
+        ctx = dict(self.env.context or {})
+        ctx.update({
+            'default_model': 'hr.payslip',
+            'active_model': 'hr.payslip',
+            'active_id': self.ids[0],
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template_id),
+            'default_template_id': template_id,
+            'default_composition_mode': 'comment',
+            'custom_layout': "mail.mail_notification_paynow",
+            'force_email': True,
+            'mark_rfq_as_sent': True,
+        })
+        return {
+            'name': _('Compose Email'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(False, 'form')],
+            'view_id': False,
+            'target': 'new',
+            'context': ctx,
+        }
+
 
 class HrPayslipWorkedDays(models.Model):
     _inherit = 'hr.payslip.worked_days'

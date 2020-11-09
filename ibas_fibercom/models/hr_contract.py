@@ -62,6 +62,7 @@ class IbasHRContract(models.Model):
         string='Philhealth Company Share')
     hdmf_personal = fields.Float(string='HDMF Personal Share', default=100)
     hdmf_company = fields.Float(string='HDMF Company Share', default=100)
+    hdmf_additional = fields.Monetary(string='HDMF Additional Share')
 
     scheduled_pay = fields.Selection([
         ('monthly', 'Monthly'),

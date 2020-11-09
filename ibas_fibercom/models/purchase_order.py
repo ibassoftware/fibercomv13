@@ -34,5 +34,5 @@ class PurchaseOrder(models.Model):
 
                 self.message_post(body="{0}: {1} ----> {2}".format(label, old_value, new_value))
 
-        # vals['date_approve'] = fields.Datetime.now()
+        vals['date_approve'] = fields.Datetime.now()
         return super(PurchaseOrder, self).write(vals)

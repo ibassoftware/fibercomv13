@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'stock', 'purchase', 'asset', 'hr', 'hr_payroll', 'hr_holidays'],
+    'depends': ['base', 'sale', 'stock', 'purchase', 'asset', 'hr', 'hr_payroll', 'hr_holidays', 'wk_odoo_directly_print_reports'],
 
     # always loaded
     'data': [
@@ -28,6 +28,7 @@
         'security/time_off_security.xml',
         'data/ir_sequence_data.xml',
         'data/report_paperformat_data.xml',
+        'data/hr_payslip_email_template.xml',
         'data/wk_printer.xml',
         'data/report_data.xml',
         'data/hr_payroll_data.xml',
