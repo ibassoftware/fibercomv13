@@ -112,3 +112,4 @@ class HrPayslipWorkedDays(models.Model):
     @api.onchange('number_of_hours')
     def _onchange_number_of_hours(self):
         self.number_of_days = self.number_of_hours / 8
+        self.number_of_minutes = self.number_of_hours * 60
