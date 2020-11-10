@@ -521,17 +521,17 @@ if inputs.INPADV:
             <field name="sequence" eval="710"/>
         </record>
 
-        <!--Salary Rule Other Loan-->
-        <record id="hr_rule_othloan" model="hr.salary.rule">
-            <field name="name">Other Loan</field>
+        <!--Salary Rule Company Loan-->
+        <record id="hr_rule_company_loan" model="hr.salary.rule">
+            <field name="name">Company Loan</field>
             <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
             <field name="category_id" ref="ibas_fibercom.LOANS"/>
-            <field name="code">OTHLOAN</field>
+            <field name="code">COMPANYLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.is_deduct_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'other').mapped('amount_deduct'))</field>
+            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'company_loan').mapped('amount_deduct'))</field>
             <field name="sequence" eval="720"/>
         </record>
         
