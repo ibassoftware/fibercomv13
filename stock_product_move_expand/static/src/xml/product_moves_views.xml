@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="StockListView.expand_moves">
+        <t t-jquery="button" t-operation="after">
+            <button type="button" class="btn btn-primary btn_expand_moves">
+                Expand Moves
+            </button>
+        </t>
+    </t>
+</templates>

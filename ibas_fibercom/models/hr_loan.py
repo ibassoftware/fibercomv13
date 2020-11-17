@@ -18,7 +18,14 @@ class Loan(models.Model):
     amount_total = fields.Monetary(string="Total Loan Amount")
     amount_deduct = fields.Monetary(string="Deduction Amount")
     type = fields.Selection(
-        [('sss', 'SSS'), ('hdmf', 'HDMF'), ('other', 'OTHER')], string='Type')
+        [('sss', 'SSS'),
+         ('hdmf', 'HDMF'),
+         ('company_loan', 'Company Loan'),
+         ('bayanihan', 'Bayanihan'),
+         ('bayanihan_loan', 'Bayanihan Loan'),
+         ('personal_charges', 'Personal Charges'),
+         ('health_card', 'Health Card'),
+         ('calamity_loan', 'Pag-IBIG Calamity Loan')], string='Type')
     amount_total_deducted = fields.Monetary(string="Total Deducted Amount")
     state = fields.Selection([('draft', 'Draft'), ('open', 'In Progress'), ('done', 'Done')], string="Status",
                              default="draft", store=True)
