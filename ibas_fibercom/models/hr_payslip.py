@@ -142,6 +142,13 @@ class IbasHrPayslip(models.Model):
             'context': ctx,
         }
 
+    def read(self, fields=None, load='_classic_read'):
+        results = super(IbasHrPayslip, self).read(fields, load)
+        if 'line_ids' in fields and self._context.get('hide_zero_amount'):
+            for (res, rec) in zip(results, self):
+                res['line_ids'] = self.line_ids.filtered('total').ids
+        return results
+
 
 class HrPayslipWorkedDays(models.Model):
     _inherit = 'hr.payslip.worked_days'
