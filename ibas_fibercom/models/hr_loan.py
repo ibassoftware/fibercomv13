@@ -25,7 +25,9 @@ class Loan(models.Model):
          ('bayanihan_loan', 'Bayanihan Loan'),
          ('personal_charges', 'Personal Charges'),
          ('health_card', 'Health Card'),
-         ('calamity_loan', 'Pag-IBIG Calamity Loan')], string='Type')
+         ('calamity_loan', 'Pag-IBIG Calamity Loan'),
+         ('other', 'Other'),
+         ('donation', 'Donation')], string='Type')
     amount_total_deducted = fields.Monetary(string="Total Deducted Amount")
     state = fields.Selection([('draft', 'Draft'), ('open', 'In Progress'), ('done', 'Done')], string="Status",
                              default="draft", store=True)
@@ -49,3 +51,12 @@ class Loan(models.Model):
             result.append((loan.id, "[%s] %s" %
                            (amount_str, loan.employee_id.name)))
         return result
+
+    def _get_loan_amount(self, loan_type):
+        loan_amount = 0.0
+        for rec in self.filtered(lambda r: r.state == 'open' and r.type == loan_type):
+            if rec.amount_deduct > (rec.amount_total - rec.amount_total_deducted):
+                loan_amount += (rec.amount_total - rec.amount_total_deducted)
+            else:
+                loan_amount += rec.amount_deduct
+        return loan_amount
