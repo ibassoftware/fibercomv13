@@ -108,7 +108,7 @@ class PayrollXlsx(models.AbstractModel):
         sheet.write(2, 34, "Lates", title2)
         sheet.write(2, 35, "Undertime", title2)
         sheet.write(2, 36, "Absent", title2)
-        sheet.write(2, 37, "Total Deductions", title2)
+        sheet.write(2, 37, "Total Deductions", bg_tot_deduct)
 
         sheet.write(2, 38, "SSS Employee Share", title2)
         sheet.write(2, 39, "HDMF Employee Share", title2)
@@ -139,10 +139,10 @@ class PayrollXlsx(models.AbstractModel):
         if date_from:
             domain.append(('date_from', '>=', date_from))
         if date_to:
-            domain.append(('date_from', '<=', date_to))
+            domain.append(('date_to', '<=', date_to))
 
         if company_id:
-            domain.append(('company_id', '=', self.env.company_id))
+            domain.append(('company_id', '=', company_id))
 
         payslips = self.env['hr.payslip'].search(domain)
 
@@ -184,7 +184,7 @@ class PayrollXlsx(models.AbstractModel):
             sheet.write(row, 4, sum(lines.filtered(
                 lambda r: r.code == 'BASICPAY').mapped('total')), title2)
             sheet.write(row, 5, sum(lines.filtered(
-                lambda r: r.code in ['ADDALLOWANCE', 'Allowance']).mapped('total')), title2)
+                lambda r: r.code == 'OALW').mapped('total')), title2)
 
             sheet.write(row, 6, sum(work_lines.filtered(
                 lambda r: r.code == 'OT').mapped('number_of_hours')), title2)
@@ -205,7 +205,7 @@ class PayrollXlsx(models.AbstractModel):
             sheet.write(row, 14, sum(work_lines.filtered(
                 lambda r: r.code == 'SHNSOT').mapped('number_of_hours')), title2)
             sheet.write(row, 15, sum(work_lines.filtered(
-                lambda r: r.code == 'SHRDNSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDSHNSOT').mapped('number_of_hours')), title2)
             sheet.write(row, 16, sum(work_lines.filtered(
                 lambda r: r.code == 'RHNSOT').mapped('number_of_hours')), title2)
             sheet.write(row, 17, sum(work_lines.filtered(
@@ -221,13 +221,13 @@ class PayrollXlsx(models.AbstractModel):
             sheet.write(row, 22, sum(work_lines.filtered(
                 lambda r: r.code == 'RDSH').mapped('number_of_hours')), title2)
             sheet.write(row, 23, sum(work_lines.filtered(
-                lambda r: r.code == 'BLANK').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'NS').mapped('number_of_hours')), title2)
             sheet.write(row, 24, sum(work_lines.filtered(
                 lambda r: r.code == 'RHNS').mapped('number_of_hours')), title2)
             sheet.write(row, 25, sum(work_lines.filtered(
                 lambda r: r.code == 'SHNS').mapped('number_of_hours')), title2)
             sheet.write(row, 26, sum(work_lines.filtered(
-                lambda r: r.code == 'BLANK').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDNS').mapped('number_of_hours')), title2)
             sheet.write(row, 27, sum(work_lines.filtered(
                 lambda r: r.code == 'RDRHNS').mapped('number_of_hours')), title2)
             sheet.write(row, 28, sum(work_lines.filtered(
@@ -258,8 +258,8 @@ class PayrollXlsx(models.AbstractModel):
                 lambda r: r.code == 'SSSEE').mapped('total')))
             sheet.write(row, 39, sum(lines.filtered(
                 lambda r: r.code == 'HDMFEE').mapped('total')))
-            # sheet.write(row, 40, sum(lines.filtered(
-            # lambda r: r.code == 'WT').mapped('total'))) # did not found Additional HDMF Employee Share
+            sheet.write(row, 40, sum(lines.filtered(
+                lambda r: r.code == 'HDMFAEE').mapped('total')))
             sheet.write(row, 41, sum(lines.filtered(
                 lambda r: r.code == 'PHILEE').mapped('total')))
 
@@ -278,16 +278,16 @@ class PayrollXlsx(models.AbstractModel):
             sheet.write(row, 48, sum(lines.filtered(
                 lambda r: r.code == 'CALLOAN').mapped('total')))
             sheet.write(row, 49, sum(lines.filtered(
-                lambda r: r.code == 'OTHERLOAN').mapped('total')))
+                lambda r: r.code in ['OTHERLOAN', 'OTHLOAN']).mapped('total')))
             sheet.write(row, 50, sum(lines.filtered(
-                lambda r: r.code == 'COMPLOAN').mapped('total')))
+                lambda r: r.code in ['COMPLOAN', 'COMPANYLOAN']).mapped('total')))
 
             sheet.write(row, 51, sum(lines.filtered(
                 lambda r: r.code == 'ADJ').mapped('total')))
-            # sheet.write(row, 52, sum(lines.filtered(
-            # lambda r: r.code == 'WT').mapped('total'))) did not found Loan Adjustment
-            # sheet.write(row, 53, sum(lines.filtered(
-            # lambda r: r.code == 'WT').mapped('total'))) did not found Withholding Tax Adjustment
+            sheet.write(row, 52, sum(lines.filtered(
+                lambda r: r.code == 'LADJ').mapped('total')))
+            sheet.write(row, 53, sum(lines.filtered(
+                lambda r: r.code == 'WHTADJ').mapped('total')))
 
             sheet.write(row, 54, sum(lines.filtered(
                 lambda r: r.code == 'ADV').mapped('total')))

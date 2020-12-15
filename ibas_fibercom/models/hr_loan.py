@@ -54,7 +54,7 @@ class Loan(models.Model):
 
     def _get_loan_amount(self, loan_type):
         loan_amount = 0.0
-        for rec in self.filtered(lambda r: r.state == 'open' and r.type == loan_type):
+        for rec in self.filtered(lambda r: r.state == 'open' and r.type == loan_type and r.date_to >= fields.Date.today()):
             if rec.amount_deduct > (rec.amount_total - rec.amount_total_deducted):
                 loan_amount += (rec.amount_total - rec.amount_total_deducted)
             else:
