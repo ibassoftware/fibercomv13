@@ -17,9 +17,16 @@ class IbasHrPayslip(models.Model):
     deduct_hdmf = fields.Boolean(string='Deduct HDMF', default=True)
     deduct_philhealth = fields.Boolean(string='Deduct Philhealth', default=True)
     deduct_mpl = fields.Boolean(string='Deduct MPL', default=True)
+    deduct_bayanihan = fields.Boolean(string="Deduct Bayanihan", default=True)
     generate_backpay = fields.Boolean(string='Generate 13th Month Pay/BackPay')
     deduct_healthcard = fields.Boolean(string='Deduct Healthcard', default=True)
-    is_deduct_loans = fields.Boolean(string="Deduct loans", default=True)
+    is_deduct_sss_loans = fields.Boolean(string="Deduct SSS Loan", default=True)
+    is_deduct_hdmf_loans = fields.Boolean(string="Deduct HDMF Loans", default=True)
+    is_deduct_bayanihan_loans = fields.Boolean(string="Deduct Bayanihan Loans", default=True)
+    is_deduct_personal_charges = fields.Boolean(string="Deduct Personal Charges", default=True)
+    is_deduct_calamity_loans = fields.Boolean(string="Deduct Calamity Loans", default=True)
+    is_deduct_other_loans = fields.Boolean(string="Deduct Other Loans", default=True)
+    is_deduct_company_loans = fields.Boolean(string="Deduct Company Loans", default=True)
 
     @api.onchange('employee_id', 'struct_id', 'contract_id', 'date_from', 'date_to')
     def _onchange_employee(self):
@@ -148,6 +155,14 @@ class IbasHrPayslip(models.Model):
             for (res, rec) in zip(results, self):
                 res['line_ids'] = self.line_ids.filtered('total').ids
         return results
+
+    @api.model
+    def _get_payslip_lines(self):
+        values = super(IbasHrPayslip, self)._get_payslip_lines()
+        for rec in values:
+            if rec['code'] in ['PHILEE', 'PHILER'] and rec['amount'] > 900:
+                rec['amount'] = 900
+        return values
 
 
 class HrPayslipWorkedDays(models.Model):
