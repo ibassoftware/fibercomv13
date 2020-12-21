@@ -68,7 +68,21 @@ class PayslipImport(models.TransientModel):
                     'struct_id': employee.contract_id.struct_id.id,
                     'is_imported': True,
                     'date_to': self.date_to,
-                    'date_from': self.date_from
+                    'date_from': self.date_from,
+                    'deduct_sss': rec.get('Deduct SSS', True),
+                    'deduct_hdmf': rec.get('Deduct HDMF', True),
+                    'deduct_philhealth': rec.get('Deduct Philhealth', True),
+                    'deduct_mpl': rec.get('Deduct MPL', True),
+                    'deduct_bayanihan': rec.get('Deduct Bayanihan', True),
+                    'generate_backpay': rec.get('Generate 13th Month Pay/BackPay', True),
+                    'deduct_healthcard': rec.get('Deduct Healthcard', True),
+                    'is_deduct_sss_loans': rec.get('Deduct SSS Loan', True),
+                    'is_deduct_hdmf_loans': rec.get('Deduct HDMF Loans', True),
+                    'is_deduct_bayanihan_loans': rec.get('Deduct Bayanihan Loans', True),
+                    'is_deduct_personal_charges': rec.get('Deduct Personal Charges', True),
+                    'is_deduct_calamity_loans': rec.get('Deduct Calamity Loans', True),
+                    'is_deduct_other_loans': rec.get('Deduct Other Loans', True),
+                    'is_deduct_company_loans': rec.get('Deduct Company Loans', True),
                 })
         records = HR_PAYSLIP.create(values)
         for rec in records:
