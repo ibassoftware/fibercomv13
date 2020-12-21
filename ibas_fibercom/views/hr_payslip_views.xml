@@ -15,13 +15,19 @@
                         <field name='deduct_hdmf'/>
                         <field name='deduct_philhealth'/>
                         <field name='deduct_mpl'/>
+                        <field name='deduct_bayanihan'/>
                     </group>
                     <group col="2" colspan="2">
                         <field name='generate_backpay'/>
                         <field name='deduct_healthcard'/>
-                        <field name='is_deduct_loans'/>
+                        <field name='is_deduct_sss_loans'/>
+                        <field name='is_deduct_hdmf_loans'/>
+                        <field name='is_deduct_bayanihan_loans'/>
+                        <field name='is_deduct_personal_charges'/>
+                        <field name='is_deduct_calamity_loans'/>
+                        <field name='is_deduct_other_loans'/>
+                        <field name='is_deduct_company_loans'/>
                     </group>
-               
                 </group>
             </xpath>
 

@@ -501,9 +501,9 @@ if inputs.INPADV:
             <field name="code">SSSLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">python</field>
-            <field name="condition_python">result = payslip.is_deduct_loans</field>
+            <field name="condition_python">result = payslip.is_deduct_sss_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'sss').mapped('amount_deduct'))</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('sss')</field>
             <field name="sequence" eval="700"/>
         </record>
 
@@ -515,9 +515,9 @@ if inputs.INPADV:
             <field name="code">HDMFLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">python</field>
-            <field name="condition_python">result = payslip.is_deduct_loans</field>
+            <field name="condition_python">result = payslip.is_deduct_hdmf_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'hdmf').mapped('amount_deduct'))</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('hdmf')</field>
             <field name="sequence" eval="710"/>
         </record>
 
@@ -529,9 +529,37 @@ if inputs.INPADV:
             <field name="code">COMPANYLOAN</field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="condition_select">python</field>
-            <field name="condition_python">result = payslip.is_deduct_loans</field>
+            <field name="condition_python">result = payslip.is_deduct_company_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = sum(employee.loan_ids.filtered(lambda r: r.state == 'open' and r.type == 'company_loan').mapped('amount_deduct'))</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('company_loan')</field>
+            <field name="sequence" eval="720"/>
+        </record>
+
+        <!--Salary Rule Other Loan-->
+        <record id="hr_rule_other_loan" model="hr.salary.rule">
+            <field name="name">Other Loan</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.LOANS"/>
+            <field name="code">OTHERLOAN</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.is_deduct_other_loans</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('other')</field>
+            <field name="sequence" eval="720"/>
+        </record>
+
+        <!--Salary Rule Donation Loan-->
+        <record id="hr_rule_donation_loan" model="hr.salary.rule">
+            <field name="name">Donation Loan</field>
+            <field name="struct_id" ref="ibas_fibercom.BASE_STRUCTURE"/>
+            <field name="category_id" ref="ibas_fibercom.LOANS"/>
+            <field name="code">DONATIONLOAN</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = payslip.is_deduct_sss_loans</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('donation')</field>
             <field name="sequence" eval="720"/>
         </record>
         
