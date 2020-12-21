@@ -187,53 +187,53 @@ class PayrollXlsx(models.AbstractModel):
                 lambda r: r.code == 'OALW').mapped('total')), title2)
 
             sheet.write(row, 6, sum(work_lines.filtered(
-                lambda r: r.code == 'OT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'OT').mapped('amount')), title2)
             sheet.write(row, 7, sum(work_lines.filtered(
-                lambda r: r.code == 'RHOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RHOT').mapped('amount')), title2)
             sheet.write(row, 8, sum(work_lines.filtered(
-                lambda r: r.code == 'SHOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'SHOT').mapped('amount')), title2)
             sheet.write(row, 9, sum(work_lines.filtered(
-                lambda r: r.code == 'RDOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDOT').mapped('amount')), title2)
             sheet.write(row, 10, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDRHOT').mapped('amount')), title2)
             sheet.write(row, 11, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSHOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDSHOT').mapped('amount')), title2)
             sheet.write(row, 12, sum(work_lines.filtered(
-                lambda r: r.code == 'NSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'NSOT').mapped('amount')), title2)
             sheet.write(row, 13, sum(work_lines.filtered(
-                lambda r: r.code == 'RDNSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDNSOT').mapped('amount')), title2)
             sheet.write(row, 14, sum(work_lines.filtered(
-                lambda r: r.code == 'SHNSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'SHNSOT').mapped('amount')), title2)
             sheet.write(row, 15, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSHNSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDSHNSOT').mapped('amount')), title2)
             sheet.write(row, 16, sum(work_lines.filtered(
-                lambda r: r.code == 'RHNSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RHNSOT').mapped('amount')), title2)
             sheet.write(row, 17, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHNSOT').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDRHNSOT').mapped('amount')), title2)
             sheet.write(row, 18, sum(work_lines.filtered(
-                lambda r: r.code == 'RH').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RH').mapped('amount')), title2)
             sheet.write(row, 19, sum(work_lines.filtered(
-                lambda r: r.code == 'SH').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'SH').mapped('amount')), title2)
             sheet.write(row, 20, sum(work_lines.filtered(
-                lambda r: r.code == 'RD').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RD').mapped('amount')), title2)
             sheet.write(row, 21, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRH').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDRH').mapped('amount')), title2)
             sheet.write(row, 22, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSH').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDSH').mapped('amount')), title2)
             sheet.write(row, 23, sum(work_lines.filtered(
-                lambda r: r.code == 'NS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'NS').mapped('amount')), title2)
             sheet.write(row, 24, sum(work_lines.filtered(
-                lambda r: r.code == 'RHNS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RHNS').mapped('amount')), title2)
             sheet.write(row, 25, sum(work_lines.filtered(
-                lambda r: r.code == 'SHNS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'SHNS').mapped('amount')), title2)
             sheet.write(row, 26, sum(work_lines.filtered(
-                lambda r: r.code == 'RDNS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDNS').mapped('amount')), title2)
             sheet.write(row, 27, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHNS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDRHNS').mapped('amount')), title2)
             sheet.write(row, 28, sum(work_lines.filtered(
-                lambda r: r.code == 'DHNS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'DHNS').mapped('amount')), title2)
             sheet.write(row, 29, sum(work_lines.filtered(
-                lambda r: r.code == 'RDDHNS').mapped('number_of_hours')), title2)
+                lambda r: r.code == 'RDDHNS').mapped('amount')), title2)
 
             sheet.write(row, 30, sum(lines.filtered(
                 lambda r: r.code == 'RALW').mapped('total')), bg_flesh)
