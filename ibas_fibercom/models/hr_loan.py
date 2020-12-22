@@ -52,9 +52,9 @@ class Loan(models.Model):
                            (amount_str, loan.employee_id.name)))
         return result
 
-    def _get_loan_amount(self, loan_type):
+    def _get_loan_amount(self, loan_type, date_from):
         loan_amount = 0.0
-        for rec in self.filtered(lambda r: r.state == 'open' and r.type == loan_type and r.date_to >= fields.Date.today()):
+        for rec in self.filtered(lambda r: r.state == 'open' and r.date_from >= date_from and r.type == loan_type and r.date_to >= fields.Date.today()):
             if rec.amount_deduct > (rec.amount_total - rec.amount_total_deducted):
                 loan_amount += (rec.amount_total - rec.amount_total_deducted)
             else:
