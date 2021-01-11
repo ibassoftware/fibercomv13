@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields
 
 
 class PayrollReportWizard(models.TransientModel):
@@ -14,6 +14,7 @@ class PayrollReportWizard(models.TransientModel):
                                ('done', 'Done'),
                                ('cancel', 'Reject'),
                                ], string="Status", default='done')
+    struct_id = fields.Many2one('hr.payroll.structure', string='Structure')
 
     def get_report(self):
         data = {
@@ -24,7 +25,8 @@ class PayrollReportWizard(models.TransientModel):
                 'date_end': self.date_to,
                 'company_id':  self.company_id and self.company_id.id or False,
                 'bank_account':  self.bank_account or False,
-                'status':  self.status or False
+                'status':  self.status or False,
+                'struct_id': self.struct_id.id
             },
         }
         return self.env.ref('payroll_report.report_payroll_xlsx').report_action(self, data=data)
