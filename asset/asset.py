@@ -249,13 +249,15 @@ class asset_asset(models.Model):
 
     def state_stock(self):
         self.update({
-            'state': 'stock'
+            'state': 'stock',
+            'date_returned': fields.Date.today()
         })
         return True
 
     def state_use(self):
         self.update({
-            'state': 'use'
+            'state': 'use',
+            'date_released': fields.Date.today()
         })
         return True
 
@@ -270,7 +272,7 @@ class asset_asset(models.Model):
     # asset_type_id = fields.Many2one('asset.type', string="Asset Type")
     asset_type = fields.Selection([
         ('device', 'Device'),
-        ('equipment', 'Equipment'),
+        ('equipment', 'Material Control: Equipment'),
         ('laptop', 'Laptop'),
         ('desktop', 'Desktop'),
         ('monitor', 'Monitor'),
@@ -278,6 +280,8 @@ class asset_asset(models.Model):
         ('ip_phone', 'IP Phone'),
         ('printer', 'Printer'),
         ('server', 'Server'),
+        ('vehicles', 'Fleet: Vehicles'),
+        ('tools', 'Fleet: Tools')
     ], string="Asset Type")
 
     # Asset Information
