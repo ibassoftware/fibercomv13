@@ -156,14 +156,6 @@ class IbasHrPayslip(models.Model):
                 res['line_ids'] = self.line_ids.filtered('total').ids
         return results
 
-    @api.model
-    def _get_payslip_lines(self):
-        values = super(IbasHrPayslip, self)._get_payslip_lines()
-        for rec in values:
-            if rec['code'] in ['PHILEE', 'PHILER'] and rec['amount'] > 900:
-                rec['amount'] = 900
-        return values
-
 
 class HrPayslipWorkedDays(models.Model):
     _inherit = 'hr.payslip.worked_days'
