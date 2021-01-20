@@ -53,12 +53,6 @@ class PayrollXlsx(models.AbstractModel):
         sheet = workbook.add_worksheet()
         sheet.set_column('A:A', 2.22)
         sheet.set_column('B:B', 24)
-        sheet.set_column('C:BE', 12)
-        sheet.set_column('BG:BG', 10)
-        sheet.set_column('BI:BI', 10)
-        sheet.set_column('BK:BO', 10)
-        sheet.set_column('BR:BS', 10)
-        sheet.set_column('BY:CB', 10)
 
         sheet.set_row(2, 80)
         sheet.write(0, 1, "PAYROLL PERIOD:", format1)
@@ -246,96 +240,111 @@ class PayrollXlsx(models.AbstractModel):
 
         sheet.merge_range('C1:CC1', range_date, format1)
 
-        def render_rows(row, sheet, lines, work_lines, cell_format={}):
+        n = 4
+        d = 1
+        total_basic_pay = 0
+        for i, ps in enumerate(payslips):
+            row = i + 1
+            row = n
+            lines = ps.line_ids
+            work_lines = ps.worked_days_line_ids
+            department = ps.sudo().employee_id.department_id and ps.sudo(
+            ).employee_id.department_id.name or False
+            sheet.set_row(row, 55)
+            sheet.write(row, 0, d)
+            sheet.write(row, 1, ps.employee_id.name, format1)
+            sheet.write(row, 2, department, title2)
+
+            basic_pay = sum(lines.filtered(lambda r: r.code == 'BASICPAY').mapped('total'))
+            total_basic_pay += basic_pay
             sheet.write(row, 3, sum(work_lines.filtered(
-                lambda r: r.code == 'BASICPAY').mapped('number_of_days')), cell_format or bg_flesh)
-            sheet.write(row, 4, sum(lines.filtered(
-                lambda r: r.code == 'BASICPAY').mapped('total')), cell_format or bg_flesh)
+                lambda r: r.code == 'BASICPAY').mapped('number_of_days')), bg_flesh)
+            sheet.write(row, 4, basic_pay, bg_flesh)
             sheet.write(row, 5, sum(lines.filtered(
-                lambda r: r.code == 'OALW').mapped('total')), cell_format)
+                lambda r: r.code == 'OALW').mapped('total')))
 
             sheet.write(row, 6, sum(work_lines.filtered(
-                lambda r: r.code == 'OT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'OT').mapped('number_of_days')))
             sheet.write(row, 7, sum(work_lines.filtered(
-                lambda r: r.code == 'OT').mapped('amount')), cell_format)
+                lambda r: r.code == 'OT').mapped('amount')))
             sheet.write(row, 8, sum(work_lines.filtered(
-                lambda r: r.code == 'RHOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RHOT').mapped('number_of_days')))
             sheet.write(row, 9, sum(work_lines.filtered(
-                lambda r: r.code == 'RHOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RHOT').mapped('amount')))
             sheet.write(row, 10, sum(work_lines.filtered(
-                lambda r: r.code == 'SHOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'SHOT').mapped('number_of_days')))
             sheet.write(row, 11, sum(work_lines.filtered(
-                lambda r: r.code == 'SHOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'SHOT').mapped('amount')))
             sheet.write(row, 12, sum(work_lines.filtered(
-                lambda r: r.code == 'RDOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDOT').mapped('number_of_days')))
             sheet.write(row, 13, sum(work_lines.filtered(
-                lambda r: r.code == 'RDOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDOT').mapped('amount')))
             sheet.write(row, 14, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDRHOT').mapped('number_of_days')))
             sheet.write(row, 15, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDRHOT').mapped('amount')))
             sheet.write(row, 16, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSHOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDSHOT').mapped('number_of_days')))
             sheet.write(row, 17, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSHOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDSHOT').mapped('amount')))
             sheet.write(row, 18, sum(work_lines.filtered(
-                lambda r: r.code == 'NSOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'NSOT').mapped('number_of_days')))
             sheet.write(row, 19, sum(work_lines.filtered(
-                lambda r: r.code == 'NSOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'NSOT').mapped('amount')))
             sheet.write(row, 20, sum(work_lines.filtered(
-                lambda r: r.code == 'RDNSOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDNSOT').mapped('number_of_days')))
             sheet.write(row, 21, sum(work_lines.filtered(
-                lambda r: r.code == 'RDNSOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDNSOT').mapped('amount')))
             sheet.write(row, 22, sum(work_lines.filtered(
-                lambda r: r.code == 'SHNSOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'SHNSOT').mapped('number_of_days')))
             sheet.write(row, 23, sum(work_lines.filtered(
-                lambda r: r.code == 'SHNSOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'SHNSOT').mapped('amount')))
             sheet.write(row, 24, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSHNSOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDSHNSOT').mapped('number_of_days')))
             sheet.write(row, 25, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSHNSOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDSHNSOT').mapped('amount')))
             sheet.write(row, 26, sum(work_lines.filtered(
-                lambda r: r.code == 'RHNSOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RHNSOT').mapped('number_of_days')))
             sheet.write(row, 27, sum(work_lines.filtered(
-                lambda r: r.code == 'RHNSOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RHNSOT').mapped('amount')))
             sheet.write(row, 28, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHNSOT').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDRHNSOT').mapped('number_of_days')))
             sheet.write(row, 29, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRHNSOT').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDRHNSOT').mapped('amount')))
             sheet.write(row, 30, sum(work_lines.filtered(
-                lambda r: r.code == 'RH').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RH').mapped('number_of_days')))
             sheet.write(row, 31, sum(work_lines.filtered(
-                lambda r: r.code == 'RH').mapped('amount')), cell_format)
+                lambda r: r.code == 'RH').mapped('amount')))
             sheet.write(row, 32, sum(work_lines.filtered(
-                lambda r: r.code == 'SH').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'SH').mapped('number_of_days')))
             sheet.write(row, 33, sum(work_lines.filtered(
-                lambda r: r.code == 'SH').mapped('amount')), cell_format)
+                lambda r: r.code == 'SH').mapped('amount')))
             sheet.write(row, 34, sum(work_lines.filtered(
-                lambda r: r.code == 'RD').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RD').mapped('number_of_days')))
             sheet.write(row, 35, sum(work_lines.filtered(
-                lambda r: r.code == 'RD').mapped('amount')), cell_format)
+                lambda r: r.code == 'RD').mapped('amount')))
             sheet.write(row, 36, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRH').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDRH').mapped('number_of_days')))
             sheet.write(row, 37, sum(work_lines.filtered(
-                lambda r: r.code == 'RDRH').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDRH').mapped('amount')))
             sheet.write(row, 38, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSH').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDSH').mapped('number_of_days')))
             sheet.write(row, 39, sum(work_lines.filtered(
-                lambda r: r.code == 'RDSH').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDSH').mapped('amount')))
             sheet.write(row, 40, sum(work_lines.filtered(
-                lambda r: r.code == 'NS').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'NS').mapped('number_of_days')))
             sheet.write(row, 41, sum(work_lines.filtered(
-                lambda r: r.code == 'NS').mapped('amount')), cell_format)
+                lambda r: r.code == 'NS').mapped('amount')))
             sheet.write(row, 42, sum(work_lines.filtered(
-                lambda r: r.code == 'RHNS').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RHNS').mapped('number_of_days')))
             sheet.write(row, 43, sum(work_lines.filtered(
-                lambda r: r.code == 'RHNS').mapped('amount')), cell_format)
+                lambda r: r.code == 'RHNS').mapped('amount')))
             sheet.write(row, 44, sum(work_lines.filtered(
-                lambda r: r.code == 'SHNS').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'SHNS').mapped('number_of_days')))
             sheet.write(row, 45, sum(work_lines.filtered(
-                lambda r: r.code == 'SHNS').mapped('amount')), cell_format)
+                lambda r: r.code == 'SHNS').mapped('amount')))
             sheet.write(row, 46, sum(work_lines.filtered(
-                lambda r: r.code == 'RDNS').mapped('number_of_days')), cell_format)
+                lambda r: r.code == 'RDNS').mapped('number_of_days')))
             sheet.write(row, 47, sum(work_lines.filtered(
                 lambda r: r.code == 'RDNS').mapped('amount')))
             sheet.write(row, 48, sum(work_lines.filtered(
@@ -349,83 +358,158 @@ class PayrollXlsx(models.AbstractModel):
             sheet.write(row, 52, sum(work_lines.filtered(
                 lambda r: r.code == 'RDDHNS').mapped('number_of_days')))
             sheet.write(row, 53, sum(work_lines.filtered(
-                lambda r: r.code == 'RDDHNS').mapped('amount')), cell_format)
+                lambda r: r.code == 'RDDHNS').mapped('amount')))
 
             sheet.write(row, 54, sum(lines.filtered(
-                lambda r: r.code == 'RALW').mapped('total')), cell_format)
+                lambda r: r.code == 'RALW').mapped('total')))
             sheet.write(row, 55, sum(lines.filtered(
-                lambda r: r.code == 'CALW').mapped('total')), cell_format)
+                lambda r: r.code == 'CALW').mapped('total')))
             sheet.write(row, 56, sum(lines.filtered(
-                lambda r: r.code == 'ADDALLOWANCE').mapped('total')), cell_format)
+                lambda r: r.code == 'ADDALLOWANCE').mapped('total')))
 
             sheet.write(row, 57, sum(lines.filtered(
-                lambda r: r.code == 'GROSS').mapped('total')), cell_format or bg_gross)
+                lambda r: r.code == 'GROSS').mapped('total')), bg_gross)
 
             sheet.write(row, 58, sum(lines.filtered(
-                lambda r: r.code == 'WT').mapped('total')), cell_format)
+                lambda r: r.code == 'WT').mapped('total')))
             sheet.write(row, 59, sum(lines.filtered(
-                lambda r: r.code == 'LATE').mapped('total')), cell_format)
+                lambda r: r.code == 'LATE').mapped('total')))
             sheet.write(row, 60, sum(lines.filtered(
-                lambda r: r.code == 'UNDERTIME').mapped('total')), cell_format)
+                lambda r: r.code == 'UNDERTIME').mapped('total')))
             sheet.write(row, 61, sum(lines.filtered(
-                lambda r: r.code == 'ABSENT').mapped('total')), cell_format)
+                lambda r: r.code == 'ABSENT').mapped('total')))
             sheet.write(row, 62, sum(lines.filtered(
-                lambda r: r.category_id.code == 'DED').mapped('total')), cell_format or bg_tot_deduct)
+                lambda r: r.category_id.code == 'DED').mapped('total')), bg_tot_deduct)
 
             sheet.write(row, 63, sum(lines.filtered(
-                lambda r: r.code == 'SSSEE').mapped('total')), cell_format)
+                lambda r: r.code == 'SSSEE').mapped('total')))
             sheet.write(row, 64, sum(lines.filtered(
-                lambda r: r.code == 'HDMFEE').mapped('total')), cell_format)
+                lambda r: r.code == 'HDMFEE').mapped('total')))
             sheet.write(row, 65, sum(lines.filtered(
-                lambda r: r.code == 'HDMFAEE').mapped('total')), cell_format)
+                lambda r: r.code == 'HDMFAEE').mapped('total')))
             sheet.write(row, 66, sum(lines.filtered(
-                lambda r: r.code == 'PHILEE').mapped('total')), cell_format)
+                lambda r: r.code == 'PHILEE').mapped('total')))
 
             sheet.write(row, 67, sum(lines.filtered(
-                lambda r: r.code == 'SSSLOAN').mapped('total')), cell_format)
+                lambda r: r.code == 'SSSLOAN').mapped('total')))
             sheet.write(row, 68, sum(lines.filtered(
-                lambda r: r.code == 'HDMFLOAN').mapped('total')), cell_format)
+                lambda r: r.code == 'HDMFLOAN').mapped('total')))
             sheet.write(row, 69, sum(lines.filtered(
-                lambda r: r.code == 'BAYANLOAN').mapped('total')), cell_format)
+                lambda r: r.code == 'BAYANLOAN').mapped('total')))
             sheet.write(row, 70, sum(lines.filtered(
-                lambda r: r.code == 'BAYAN').mapped('total')), cell_format)
+                lambda r: r.code == 'BAYAN').mapped('total')))
             sheet.write(row, 71, sum(lines.filtered(
-                lambda r: r.code == 'PC').mapped('total')), cell_format)
+                lambda r: r.code == 'PC').mapped('total')))
             sheet.write(row, 72, sum(lines.filtered(
-                lambda r: r.code == 'HC').mapped('total')), cell_format)
+                lambda r: r.code == 'HC').mapped('total')))
             sheet.write(row, 73, sum(lines.filtered(
-                lambda r: r.code == 'CALLOAN').mapped('total')), cell_format)
+                lambda r: r.code == 'CALLOAN').mapped('total')))
             sheet.write(row, 74, sum(lines.filtered(
-                lambda r: r.code in ['OTHERLOAN', 'OTHLOAN']).mapped('total')), cell_format)
+                lambda r: r.code in ['OTHERLOAN', 'OTHLOAN']).mapped('total')))
             sheet.write(row, 75, sum(lines.filtered(
-                lambda r: r.code in ['COMPLOAN', 'COMPANYLOAN']).mapped('total')), cell_format)
+                lambda r: r.code in ['COMPLOAN', 'COMPANYLOAN']).mapped('total')))
 
             sheet.write(row, 76, sum(lines.filtered(
-                lambda r: r.code == 'ADJ').mapped('total')), cell_format)
+                lambda r: r.code == 'ADJ').mapped('total')))
             sheet.write(row, 77, sum(lines.filtered(
-                lambda r: r.code == 'LADJ').mapped('total')), cell_format)
+                lambda r: r.code == 'LADJ').mapped('total')))
             sheet.write(row, 78, sum(lines.filtered(
-                lambda r: r.code == 'WHTADJ').mapped('total')), cell_format)
+                lambda r: r.code == 'WHTADJ').mapped('total')))
 
             sheet.write(row, 79, sum(lines.filtered(
-                lambda r: r.code == 'ADV').mapped('total')), cell_format)
+                lambda r: r.code == 'ADV').mapped('total')))
             sheet.write(row, 80, sum(lines.filtered(
-                lambda r: r.code == 'NET').mapped('total')), cell_format or bg_net_pay)
+                lambda r: r.code == 'NET').mapped('total')), bg_net_pay)
 
-        n = 4
-        d = 1
-        for i, ps in enumerate(payslips):
-            row = n
-            lines = ps.line_ids
-            work_lines = ps.worked_days_line_ids
-            department = ps.sudo().employee_id.department_id and ps.sudo(
-            ).employee_id.department_id.name or False
-            sheet.set_row(row, 55)
-            sheet.write(row, 0, d)
-            sheet.write(row, 1, ps.employee_id.name, format1)
-            sheet.write(row, 2, department, title2)
-            render_rows(row, sheet, lines, work_lines)
             n += 1
             d += 1
+
+        work_lines = payslips.worked_days_line_ids
+        lines = payslips.line_ids
+        values = {
+            3: sum(work_lines.filtered(lambda r: r.code == 'BASICPAY').mapped('number_of_days')),
+            4: sum(lines.filtered(lambda r: r.code == 'BASICPAY').mapped('total')),
+            5: sum(lines.filtered(lambda r: r.code == 'OALW').mapped('total')),
+            6: sum(work_lines.filtered(lambda r: r.code == 'OT').mapped('number_of_days')),
+            7: sum(work_lines.filtered(lambda r: r.code == 'OT').mapped('amount')),
+            8: sum(work_lines.filtered(lambda r: r.code == 'RHOT').mapped('number_of_days')),
+            9: sum(work_lines.filtered(lambda r: r.code == 'RHOT').mapped('amount')),
+            10: sum(work_lines.filtered(lambda r: r.code == 'SHOT').mapped('number_of_days')),
+            11: sum(work_lines.filtered(lambda r: r.code == 'SHOT').mapped('amount')),
+            12: sum(work_lines.filtered(lambda r: r.code == 'RDOT').mapped('number_of_days')),
+            13: sum(work_lines.filtered(lambda r: r.code == 'RDOT').mapped('amount')),
+            14: sum(work_lines.filtered(lambda r: r.code == 'RDRHOT').mapped('number_of_days')),
+            15: sum(work_lines.filtered(lambda r: r.code == 'RDRHOT').mapped('amount')),
+            16: sum(work_lines.filtered(lambda r: r.code == 'RDSHOT').mapped('number_of_days')),
+            17: sum(work_lines.filtered(lambda r: r.code == 'RDSHOT').mapped('amount')),
+            18: sum(work_lines.filtered(lambda r: r.code == 'NSOT').mapped('number_of_days')),
+            19: sum(work_lines.filtered(lambda r: r.code == 'NSOT').mapped('amount')),
+            20: sum(work_lines.filtered(lambda r: r.code == 'RDNSOT').mapped('number_of_days')),
+            21: sum(work_lines.filtered(lambda r: r.code == 'RDNSOT').mapped('amount')),
+            22: sum(work_lines.filtered(lambda r: r.code == 'SHNSOT').mapped('number_of_days')),
+            23: sum(work_lines.filtered(lambda r: r.code == 'SHNSOT').mapped('amount')),
+            24: sum(work_lines.filtered(lambda r: r.code == 'RDSHNSOT').mapped('number_of_days')),
+            25: sum(work_lines.filtered(lambda r: r.code == 'RDSHNSOT').mapped('amount')),
+            26: sum(work_lines.filtered(lambda r: r.code == 'RHNSOT').mapped('number_of_days')),
+            27: sum(work_lines.filtered(lambda r: r.code == 'RHNSOT').mapped('amount')),
+            28: sum(work_lines.filtered(lambda r: r.code == 'RDRHNSOT').mapped('number_of_days')),
+            29: sum(work_lines.filtered(lambda r: r.code == 'RDRHNSOT').mapped('amount')),
+            30: sum(work_lines.filtered(lambda r: r.code == 'RH').mapped('number_of_days')),
+            31: sum(work_lines.filtered(lambda r: r.code == 'RH').mapped('amount')),
+            32: sum(work_lines.filtered(lambda r: r.code == 'SH').mapped('number_of_days')),
+            33: sum(work_lines.filtered(lambda r: r.code == 'SH').mapped('amount')),
+            34: sum(work_lines.filtered(lambda r: r.code == 'RD').mapped('number_of_days')),
+            35: sum(work_lines.filtered(lambda r: r.code == 'RD').mapped('amount')),
+            36: sum(work_lines.filtered(lambda r: r.code == 'RDRH').mapped('number_of_days')),
+            37: sum(work_lines.filtered(lambda r: r.code == 'RDRH').mapped('amount')),
+            38: sum(work_lines.filtered(lambda r: r.code == 'RDSH').mapped('number_of_days')),
+            39: sum(work_lines.filtered(lambda r: r.code == 'RDSH').mapped('amount')),
+            40: sum(work_lines.filtered(lambda r: r.code == 'NS').mapped('number_of_days')),
+            41: sum(work_lines.filtered(lambda r: r.code == 'NS').mapped('amount')),
+            42: sum(work_lines.filtered(lambda r: r.code == 'RHNS').mapped('number_of_days')),
+            43: sum(work_lines.filtered(lambda r: r.code == 'RHNS').mapped('amount')),
+            44: sum(work_lines.filtered(lambda r: r.code == 'SHNS').mapped('number_of_days')),
+            45: sum(work_lines.filtered(lambda r: r.code == 'SHNS').mapped('amount')),
+            46: sum(work_lines.filtered(lambda r: r.code == 'RDNS').mapped('number_of_days')),
+            47: sum(work_lines.filtered(lambda r: r.code == 'RDNS').mapped('amount')),
+            48: sum(work_lines.filtered(lambda r: r.code == 'RDRHNS').mapped('number_of_days')),
+            49: sum(work_lines.filtered(lambda r: r.code == 'RDRHNS').mapped('amount')),
+            50: sum(work_lines.filtered(lambda r: r.code == 'DHNS').mapped('number_of_days')),
+            51: sum(work_lines.filtered(lambda r: r.code == 'DHNS').mapped('amount')),
+            52: sum(work_lines.filtered(lambda r: r.code == 'RDDHNS').mapped('number_of_days')),
+            53: sum(work_lines.filtered(lambda r: r.code == 'RDDHNS').mapped('amount')),
+            54: sum(lines.filtered(lambda r: r.code == 'RALW').mapped('total')),
+            55: sum(lines.filtered(lambda r: r.code == 'CALW').mapped('total')),
+            56: sum(lines.filtered(lambda r: r.code == 'ADDALLOWANCE').mapped('total')),
+            57: sum(lines.filtered(lambda r: r.code == 'GROSS').mapped('total')),
+            58: sum(lines.filtered(lambda r: r.code == 'WT').mapped('total')),
+            59: sum(lines.filtered(lambda r: r.code == 'LATE').mapped('total')),
+            60: sum(lines.filtered(lambda r: r.code == 'UNDERTIME').mapped('total')),
+            61: sum(lines.filtered(lambda r: r.code == 'ABSENT').mapped('total')),
+            62: sum(lines.filtered(lambda r: r.category_id.code == 'DED').mapped('total')),
+            63: sum(lines.filtered(lambda r: r.code == 'SSSEE').mapped('total')),
+            64: sum(lines.filtered(lambda r: r.code == 'HDMFEE').mapped('total')),
+            65: sum(lines.filtered(lambda r: r.code == 'HDMFAEE').mapped('total')),
+            66: sum(lines.filtered(lambda r: r.code == 'PHILEE').mapped('total')),
+            67: sum(lines.filtered(lambda r: r.code == 'SSSLOAN').mapped('total')),
+            68: sum(lines.filtered(lambda r: r.code == 'HDMFLOAN').mapped('total')),
+            69: sum(lines.filtered(lambda r: r.code == 'BAYANLOAN').mapped('total')),
+            70: sum(lines.filtered(lambda r: r.code == 'BAYAN').mapped('total')),
+            71: sum(lines.filtered(lambda r: r.code == 'PC').mapped('total')),
+            72: sum(lines.filtered(lambda r: r.code == 'HC').mapped('total')),
+            73: sum(lines.filtered(lambda r: r.code == 'CALLOAN').mapped('total')),
+            74: sum(lines.filtered(lambda r: r.code in ['OTHERLOAN', 'OTHLOAN']).mapped('total')),
+            75: sum(lines.filtered(lambda r: r.code in ['COMPLOAN', 'COMPANYLOAN']).mapped('total')),
+            76: sum(lines.filtered(lambda r: r.code == 'ADJ').mapped('total')),
+            77: sum(lines.filtered(lambda r: r.code == 'LADJ').mapped('total')),
+            78: sum(lines.filtered(lambda r: r.code == 'WHTADJ').mapped('total')),
+            79: sum(lines.filtered(lambda r: r.code == 'ADV').mapped('total')),
+            80: sum(lines.filtered(lambda r: r.code == 'NET').mapped('total')),
+        }
+
+        alpha = ['D:D', 'E:E', 'F:F', 'G:G', 'H:H', 'I:I', 'J:J', 'K:K', 'L:L', 'M:M', 'N:N', 'O:O', 'P:P', 'Q:Q', 'R:R', 'S:S', 'T:T', 'U:U', 'V:V', 'W:W', 'X:X', 'Y:Y', 'Z:Z', 'AA:AA', 'AB:AB', 'AC:AC', 'AD:AD', 'AE:AE', 'AF:AF', 'AG:AG', 'AH:AH', 'AI:AI', 'AJ:AJ', 'AK:AK', 'AL:AL', 'AM:AM', 'AN:AN', 'AO:AO', 'AP:AP', 'AQ:AQ', 'AR:AR', 'AS:AS', 'AT:AT', 'AU:AU', 'AV:AV', 'AW:AW', 'AX:AX', 'AY:AY', 'AZ:AZ', 'BA:BA', 'BB:BB', 'BC:BC', 'BD:BD', 'BE:BE', 'BF:BF', 'BG:BG', 'BH:BH', 'BI:BI', 'BJ:BJ', 'BK:BK', 'BL:BL', 'BM:BM', 'BN:BN', 'BO:BO', 'BP:BP', 'BQ:BQ', 'BR:BR', 'BS:BS', 'BT:BT', 'BU:BU', 'BV:BV', 'BW:BW', 'BX:BX', 'BY:BY', 'BZ:BZ', 'CA:CA', 'CB:CB', 'CC:CC']
         sheet.write(n, 1, 'Total', format1)
-        render_rows(n, sheet, payslips.line_ids, payslip.worked_days_line_ids, format1)
+        for key, val, alp in zip(values.keys(), values.values(), alpha):
+            width = 12 if key <= 53 else 10
+            sheet.set_column(alp, width, format1, options={'hidden': not val})
+            sheet.write(n, key, val)
